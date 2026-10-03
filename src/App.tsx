@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { CartProvider, useCart } from './context/CartContext';
 import { Header } from './components/Header';
 import { HeroCurtain } from './components/HeroCurtain';
@@ -37,94 +38,132 @@ import { FlyToCartGhost } from './components/FlyToCartGhost';
 import { ProductDetailPage } from './components/ProductDetailPage';
 import { AgentSamAssistant } from './components/AgentSamAssistant';
 
+// High-Fashion Editorial Page Transition Variants
+const pageVariants: Variants = {
+  initial: {
+    opacity: 0,
+    y: 18,
+    scale: 0.995,
+    filter: 'blur(3px)'
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.52,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: -14,
+    scale: 0.995,
+    filter: 'blur(2px)',
+    transition: {
+      duration: 0.38,
+      ease: [0.65, 0, 0.35, 1]
+    }
+  }
+};
+
 const MainStoreContent: React.FC = () => {
   const { activeProductPage } = useCart();
+  const currentKey = activeProductPage ? `pdp-${activeProductPage.id}` : 'storefront-main';
 
-  // If viewing a dedicated standalone product page
-  if (activeProductPage) {
-    return (
-      <main>
-        <ProductDetailPage />
-      </main>
-    );
-  }
-
-  // Master Scroll Map Sequence (27 Sections)
   return (
-    <main>
-      {/* ACT I: THE ENTRANCE */}
-      {/* S02: Sticky Curtain Hero with Hotspots */}
-      <HeroCurtain />
+    <AnimatePresence mode="wait">
+      <motion.main
+        key={currentKey}
+        variants={pageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="w-full will-change-transform"
+      >
+        {activeProductPage ? (
+          /* Dedicated Standalone Product Details Page */
+          <ProductDetailPage />
+        ) : (
+          /* Master Scroll Map Sequence (27 Sections) */
+          <>
+            {/* ACT I: THE ENTRANCE */}
+            {/* S02: Sticky Curtain Hero with Hotspots */}
+            <HeroCurtain />
 
-      {/* S03: Image Gallery "The Wardrobe" (Slides OVER Hero) */}
-      <WardrobeGallery />
+            {/* S03: Image Gallery "The Wardrobe" (Slides OVER Hero) */}
+            <WardrobeGallery />
 
-      {/* ACT II: WINDOW SHOPPING */}
-      {/* S04: Dark 4-Up Promo Tiles (Desktop) */}
-      <PromoGrid />
+            {/* ACT II: WINDOW SHOPPING */}
+            {/* S04: Dark 4-Up Promo Tiles (Desktop) */}
+            <PromoGrid />
 
-      {/* S05 & S06: "The Selected" + 5 Circular Story Rings */}
-      <StoriesRings />
+            {/* S05 & S06: "The Selected" + 5 Circular Story Rings */}
+            <StoriesRings />
 
-      {/* S07: Tabbed Collection Carousel (New / Best / Sale) */}
-      <CollectionCarousel />
+            {/* S07: Tabbed Collection Carousel (New / Best / Sale) */}
+            <CollectionCarousel />
 
-      {/* ACT III: THE BRAND WORLD */}
-      {/* S08: Fullscreen Media Product + Scroll-Linked Text Reveal */}
-      <FullscreenEditorial />
+            {/* ACT III: THE BRAND WORLD */}
+            {/* S08: Fullscreen Media Product + Scroll-Linked Text Reveal */}
+            <FullscreenEditorial />
 
-      {/* S09: Split Media Diptych (Discover Cotton | Discover Leather) */}
-      <SplitMediaDiptych />
+            {/* S09: Split Media Diptych (Discover Cotton | Discover Leather) */}
+            <SplitMediaDiptych />
 
-      {/* S10: Dress Blurb & Cascade Link */}
-      <DressBlurb />
+            {/* S10: Dress Blurb & Cascade Link */}
+            <DressBlurb />
 
-      {/* S11: Shoppable Lookbook with Interactive Hotspots */}
-      <ShopTheLookbook />
+            {/* S11: Shoppable Lookbook with Interactive Hotspots */}
+            <ShopTheLookbook />
 
-      {/* ACT IV: THE SELL */}
-      {/* S12: Bundle Product "Better Together" with Pinned Summary */}
-      <BundleBuilder />
+            {/* ACT IV: THE SELL */}
+            {/* S12: Bundle Product "Better Together" with Pinned Summary */}
+            <BundleBuilder />
 
-      {/* S13: Featured Product 3-Column PDP with Dual Pinned Rails */}
-      <FeaturedPDP />
+            {/* S13: Featured Product 3-Column PDP with Dual Pinned Rails */}
+            <FeaturedPDP />
 
-      {/* S14: Giant Ticker Marquee */}
-      <TickerMarquee />
+            {/* S14: Giant Ticker Marquee */}
+            <TickerMarquee />
 
-      {/* S15: Featured Collection Split Media with Pinned Column */}
-      <RefinedBasicsSplit />
+            {/* S15: Featured Collection Split Media with Pinned Column */}
+            <RefinedBasicsSplit />
 
-      {/* ACT V: THE FILM + TEASER */}
-      {/* S16: Full-Bleed Brand Film */}
-      <BrandFilm />
+            {/* ACT V: THE FILM + TEASER */}
+            {/* S16: Full-Bleed Brand Film */}
+            <BrandFilm />
 
-      {/* S17: "Something New Is Almost Ready" Teaser & VIP Reserve */}
-      <TeaserReserve />
+            {/* S17: "Something New Is Almost Ready" Teaser & VIP Reserve */}
+            <TeaserReserve />
 
-      {/* ACT VI: PROOF + CONTENT */}
-      {/* S18: Press Logo Infinite Loop */}
-      <LogoMarquee />
+            {/* ACT VI: PROOF + CONTENT */}
+            {/* S18: Press Logo Infinite Loop */}
+            <LogoMarquee />
 
-      {/* S19: "The Rhythm of Contrast" Before / After Drag Slider */}
-      <BeforeAfterSlider />
+            {/* S19: "The Rhythm of Contrast" Before / After Drag Slider */}
+            <BeforeAfterSlider />
 
-      {/* S20: 5-Star Testimonials Carousel */}
-      <TestimonialsSection />
+            {/* S20: 5-Star Testimonials Carousel */}
+            <TestimonialsSection />
 
-      {/* S21: Blog Posts Sticky Stacking Deck */}
-      <BlogPostsStack />
+            {/* S21: Blog Posts Sticky Stacking Deck */}
+            <BlogPostsStack />
 
-      {/* ACT VII: CLOSE */}
-      {/* S22: Newsletter "The Edit, In Your Inbox" */}
-      <NewsletterBand />
+            {/* ACT VII: CLOSE */}
+            {/* S22: Newsletter "The Edit, In Your Inbox" */}
+            <NewsletterBand />
 
-      {/* S23: @RADIAN Social Grid 3x2 Full Bleed */}
-      <SocialGrid />
+            {/* S23: @RADIAN Social Grid 3x2 Full Bleed */}
+            <SocialGrid />
 
-      {/* S24 & S25: FAQ Accordions & Trust Strip */}
-      <FAQAndTrust />
-    </main>
+            {/* S24 & S25: FAQ Accordions & Trust Strip */}
+            <FAQAndTrust />
+          </>
+        )}
+      </motion.main>
+    </AnimatePresence>
   );
 };
 
@@ -148,7 +187,7 @@ export default function App() {
         {/* Built-in AgentSam Assistant Dashboard with Interactive Tips */}
         <AgentSamAssistant />
 
-        {/* Main Storefront or Dedicated PDP View */}
+        {/* Main Storefront or Dedicated PDP View with Framer Motion Page Transitions */}
         <MainStoreContent />
 
         {/* S26 & S27: Footer & Bottom Panel */}
