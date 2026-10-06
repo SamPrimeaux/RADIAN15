@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Megaphone, ShoppingBag, Globe, Sparkles } from 'lucide-react';
+import { Search, Megaphone, ShoppingBag, Globe, Sparkles, Layers } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { PageRoute } from '../types';
 
 export const Header: React.FC = () => {
   const {
+    currentPage,
+    navigateTo,
     cartCount,
     setIsMenuOpen,
     isMenuOpen,
@@ -12,18 +15,14 @@ export const Header: React.FC = () => {
     setIsDiscoverOpen,
     isBagPopping,
     currency,
-    setCurrency,
-    isAgentSamOpen,
-    setIsAgentSamOpen,
-    activeProductPage,
-    setActiveProductPage
+    setCurrency
   } = useCart();
 
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      if (window.scrollY > 40) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -32,6 +31,15 @@ export const Header: React.FC = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const navLinks: { label: string; route: PageRoute; badge?: string }[] = [
+    { label: 'FLAGSHIP', route: 'home' },
+    { label: 'COLLECTIONS', route: 'collections' },
+    { label: 'EDITORIAL', route: 'lookbook' },
+    { label: 'MAISON', route: 'maison' },
+    { label: 'VIP VAULT', route: 'reserve' },
+    { label: 'BRAND STUDIO', route: 'studio', badge: 'STUDIO' }
+  ];
 
   return (
     <>
@@ -43,11 +51,11 @@ export const Header: React.FC = () => {
             <span className="text-[#8b181b]">✦</span>
           </span>
           <span className="mx-4 sm:mx-6 flex items-center gap-2">
-            <span>Members save 20% on their first order</span>
+            <span>Autumn / Winter 26 runway archive now live</span>
             <span className="text-[#8b181b]">✦</span>
           </span>
           <span className="mx-4 sm:mx-6 flex items-center gap-2">
-            <span>Autumn / Winter 26 runway archive now live</span>
+            <span>Explore the new AgentSam Brand Stream Workspace</span>
             <span className="text-[#8b181b]">✦</span>
           </span>
           <span className="mx-4 sm:mx-6 flex items-center gap-2">
@@ -60,11 +68,11 @@ export const Header: React.FC = () => {
             <span className="text-[#8b181b]">✦</span>
           </span>
           <span className="mx-4 sm:mx-6 flex items-center gap-2">
-            <span>Members save 20% on their first order</span>
+            <span>Autumn / Winter 26 runway archive now live</span>
             <span className="text-[#8b181b]">✦</span>
           </span>
           <span className="mx-4 sm:mx-6 flex items-center gap-2">
-            <span>Autumn / Winter 26 runway archive now live</span>
+            <span>Explore the new AgentSam Brand Stream Workspace</span>
             <span className="text-[#8b181b]">✦</span>
           </span>
           <span className="mx-4 sm:mx-6 flex items-center gap-2">
@@ -79,17 +87,17 @@ export const Header: React.FC = () => {
         className={`fixed left-0 right-0 z-40 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isScrolled
             ? 'top-2 sm:top-4 px-3 sm:px-4 flex justify-center pointer-events-none'
-            : 'top-[35px] px-4 sm:px-8 md:px-10 h-14 bg-gradient-to-b from-black/85 via-black/50 to-transparent'
+            : 'top-[35px] px-4 sm:px-8 md:px-10 h-16 bg-gradient-to-b from-black/85 via-black/50 to-transparent'
         }`}
       >
         <div
           className={`pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isScrolled
-              ? 'w-full max-w-[1046px] h-12 bg-white/95 text-[#0b0b0b] rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.18)] backdrop-blur-md px-4 sm:px-6 flex items-center justify-between border border-black/5'
+              ? 'w-full max-w-[1140px] h-12 bg-white/95 text-[#0b0b0b] rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.18)] backdrop-blur-md px-4 sm:px-6 flex items-center justify-between border border-black/5'
               : 'w-full h-full flex items-center justify-between text-white'
           }`}
         >
-          {/* Left Zone: Hamburger & Desktop Navigation */}
+          {/* Left Zone: Hamburger & Brand Wordmark */}
           <div className="flex items-center gap-4 sm:gap-6">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -115,47 +123,9 @@ export const Header: React.FC = () => {
               </div>
             </button>
 
-            {/* Desktop Rolling Links */}
-            <nav className="hidden md:flex items-center gap-7 text-[12px] uppercase tracking-[0.16em] font-medium">
-              <a
-                href="#shop"
-                onClick={() => activeProductPage && setActiveProductPage(null)}
-                className="group roll-text"
-              >
-                <span>SHOP</span>
-                <span>SHOP</span>
-              </a>
-              <a
-                href="#wardrobe"
-                onClick={() => activeProductPage && setActiveProductPage(null)}
-                className="group roll-text"
-              >
-                <span>WARDROBE</span>
-                <span>WARDROBE</span>
-              </a>
-              <a
-                href="#bundle"
-                onClick={() => activeProductPage && setActiveProductPage(null)}
-                className="group roll-text"
-              >
-                <span>BUNDLES</span>
-                <span>BUNDLES</span>
-              </a>
-              <a
-                href="#editorial"
-                onClick={() => activeProductPage && setActiveProductPage(null)}
-                className="group roll-text"
-              >
-                <span>EDITORIAL</span>
-                <span>EDITORIAL</span>
-              </a>
-            </nav>
-          </div>
-
-          {/* Center Zone: Brand Wordmark (Clean centering with zero overlap) */}
-          <div className="flex items-center justify-center">
+            {/* Brand Wordmark */}
             <button
-              onClick={() => setActiveProductPage(null)}
+              onClick={() => navigateTo('home')}
               className={`font-semibold tracking-[0.25em] sm:tracking-[0.3em] uppercase transition-colors flex items-center gap-1 cursor-pointer ${
                 isScrolled ? 'text-[#0b0b0b] text-[14px] sm:text-[16px]' : 'text-white text-[14px] sm:text-[17px]'
               }`}
@@ -166,10 +136,42 @@ export const Header: React.FC = () => {
             </button>
           </div>
 
-          {/* Right Zone: Controls (Search, Discover, Bag, AgentSam) */}
+          {/* Center Zone: Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-6 text-[11px] xl:text-[12px] uppercase tracking-[0.16em] font-medium">
+            {navLinks.map(link => {
+              const isActive = currentPage === link.route;
+              return (
+                <button
+                  key={link.route}
+                  onClick={() => navigateTo(link.route)}
+                  className={`relative py-1 transition-colors cursor-pointer group flex items-center gap-1.5 ${
+                    isActive
+                      ? isScrolled
+                        ? 'text-black font-bold'
+                        : 'text-white font-bold'
+                      : isScrolled
+                      ? 'text-neutral-600 hover:text-black'
+                      : 'text-neutral-300 hover:text-white'
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  {link.badge && (
+                    <span className="px-1.5 py-0.2 bg-[#8b181b] text-white text-[8px] font-mono rounded tracking-widest shadow-xs">
+                      {link.badge}
+                    </span>
+                  )}
+                  {isActive && (
+                    <span className="absolute bottom-0 inset-x-0 h-[2px] bg-[#8b181b] rounded-full" />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Right Zone: Controls (Search, Discover, Bag, Currency) */}
           <div className="flex items-center gap-1.5 sm:gap-3">
             {/* Currency selector (Desktop only) */}
-            <div className="relative hidden lg:flex items-center gap-1 text-[11px] font-medium tracking-wider">
+            <div className="relative hidden xl:flex items-center gap-1 text-[11px] font-medium tracking-wider">
               <Globe className="w-3.5 h-3.5 opacity-60" />
               <select
                 value={currency}
@@ -214,24 +216,7 @@ export const Header: React.FC = () => {
               aria-label="Shopping bag"
             >
               <ShoppingBag className="w-3.5 h-3.5" />
-              <span className="hidden xs:inline uppercase text-[10px] sm:text-[11px]">BAG</span>
-              <span className="text-[11px] font-semibold tabular-nums">
-                ({cartCount})
-              </span>
-            </button>
-
-            {/* Studio / AgentSam toggle icon for quick dashboard launch */}
-            <button
-              onClick={() => setIsAgentSamOpen(!isAgentSamOpen)}
-              className={`p-1.5 rounded-full transition-all cursor-pointer ${
-                isAgentSamOpen
-                  ? 'bg-[#8b181b] text-white'
-                  : 'text-white/60 hover:text-white hover:bg-white/10'
-              }`}
-              title="AgentSam Studio Dashboard"
-              aria-label="AgentSam Assistant"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#e2a8aa]" />
+              <span className="font-mono text-xs font-semibold">({cartCount})</span>
             </button>
           </div>
         </div>
