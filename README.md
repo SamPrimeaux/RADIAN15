@@ -1,3 +1,11 @@
+> **Archived historical donor — read-only.** The full Editorial Commons source and
+> its original Git history were imported into the canonical development repo:
+> https://github.com/SamPrimeaux/inneranimalmedia-cms/tree/main/apps/editorial-commons
+> Continue all new section, theme, CMS editor and storefront work there. Its
+> integrated Design Atlas now reviews 39 source-backed scenes, and the first
+> SiteDocument-bound cross-brand section. This repository remains available for
+> provenance, but is not a second development authority.
+
 # Editorial Commons — FORM / 26 Storefront and Visual Scene Library
 
 A multi-page editorial-commerce visual study with reusable React scene boundaries. Uses **React 19, TypeScript, Tailwind CSS v4, and Framer Motion**. Content and transactions are not connected to live customer backends.
