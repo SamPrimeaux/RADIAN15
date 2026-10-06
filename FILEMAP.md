@@ -1,4 +1,6 @@
-# Repository Filemap & Work-in-Progress (WIP) Architecture
+# Repository Filemap & Architecture (historical + Editorial Commons)
+
+**New contract:** src/portable exposes 39 individually inspectable React scenes and pages through a neutral host interface. See docs/EDITORIAL_COMMONS.md for readiness caveats. Original paths are preserved below.
 
 ## 📂 Complete File Tree Map
 
@@ -8,25 +10,26 @@
 ├── metadata.json                        # AI Studio applet capabilities and naming
 ├── package.json                         # Dependencies & project scripts
 ├── tsconfig.json                        # TypeScript strict compiler configuration
-├── vite.config.ts                       # Vite 8 config with Tailwind v4 & path aliases
-├── README.md                            # Complete storefront architecture & feature documentation
+├── vite.config.ts                       # Vite 8 config with Tailwind v4 & host allowlisting
+├── README.md                            # Complete multi-page storefront & Brand Studio documentation
 ├── FILEMAP.md                           # This file: component map, module roles & WIP status
 ├── .env.example                         # Environment variables placeholder
 ├── .gitignore                           # Git ignore rules
 │
 └── src/
     ├── main.tsx                         # React 19 root bootstrap
-    ├── App.tsx                          # Master app layout, section orchestrator & overlay host
+    ├── App.tsx                          # Synchronized page router with Framer Motion transitions
     ├── index.css                        # Custom easing tokens, marquees, keyframes & touch rules
     │
     ├── types/
-    │   └── index.ts                     # TypeScript data interfaces (Product, CartItem, Story, etc.)
+    │   └── index.ts                     # TypeScript data interfaces (PageRoute, Product, EpistemicState, BrandWorkspace)
     │
     ├── data/
-    │   └── catalog.ts                   # Autumn/Winter 26 products, stories, reviews, blogs, faqs
+    │   ├── catalog.ts                   # Autumn/Winter 26 products, stories, reviews, blogs, faqs datasets
+    │   └── brandStreamData.ts           # Brand workspaces (RADIAN, FNF, CoPro), recovery receipts & cards
     │
     ├── context/
-    │   └── CartContext.tsx              # Global state: cart, drawers, PDP routing, currency & fly ghost
+    │   └── CartContext.tsx              # Central state: multi-page routing, cart, overlays, currency & fly ghost
     │
     ├── assets/
     │   └── images/                      # Generated campaign & studio photography assets
@@ -38,22 +41,30 @@
     │
     └── components/                      # Modular UI components
         │
+        ├── # Dedicated Multi-Page Views (src/components/pages/)
+        ├── pages/CollectionsPage.tsx    # Faceted catalog with category filters, grid toggles & sorting
+        ├── pages/LookbookPage.tsx       # Shoppable campaign lookbook with interactive hotspot pins
+        ├── pages/MaisonPage.tsx         # Atelier heritage, material craft slider & flagship bookings
+        ├── pages/ReserveVaultPage.tsx   # Limited-batch numbered drop vault & VIP pass generator
+        ├── pages/BrandStreamPage.tsx    # AgentSam Brand Stream, recovery simulator & inspector drawer
+        │
+        ├── # Standalone PDP & Studio Dashboard
+        ├── ProductDetailPage.tsx        # Dedicated standalone PDP view with contiguous buy module
+        ├── AgentSamAssistant.tsx        # Developer dashboard, multi-page fast router & prompt carousel
+        │
         ├── # Global Navigation & Overlays
-        ├── Header.tsx                   # S01 Marquee + Floating Nav (Transparent -> White Pill)
-        ├── MenuDrawer.tsx               # Full-height frosted glassmorphic drill-down menu
-        ├── SearchPanel.tsx              # S01 Top drop-down search sheet (translateY -128px -> 0)
-        ├── BagDrawer.tsx                # Slide-over cart (520px) with shipping meter & checkout
+        ├── Header.tsx                   # Universal floating pill navigation with active route tabs
+        ├── Footer.tsx                   # Dark luxury footer with multi-page directory & currency selector
+        ├── MenuDrawer.tsx               # Full-height frosted glassmorphic drill-down navigation
+        ├── SearchPanel.tsx              # Top drop-down search sheet with predictive search
+        ├── BagDrawer.tsx                # Slide-over bag (520px) with shipping meter & checkout
         ├── DiscoverDrawer.tsx           # Megaphone tabbed drawer (New & Now, Offers, More)
         ├── PromoTabCard.tsx             # Persistent vertical left tab ("Get 15% off") + modal card
         ├── StoriesViewerModal.tsx       # Full-screen vertical Instagram-style story player
         ├── QuickViewModal.tsx           # In-place modal PDP preview with swatches & size chips
         ├── FlyToCartGhost.tsx           # "+1" physical arc animation from button to header BAG
         │
-        ├── # Standalone Pages & Studio Dashboard
-        ├── ProductDetailPage.tsx        # Dedicated standalone PDP view with contiguous buy module
-        ├── AgentSamAssistant.tsx        # Built-in developer dashboard, tips carousel & loading state
-        │
-        ├── # Master Scroll Sections (Acts I – VII)
+        ├── # Master Scroll Flagship Sections (Acts I – VII)
         ├── HeroCurtain.tsx              # S02 Sticky curtain hero with pulsating garment hotspots
         ├── WardrobeGallery.tsx          # S03 5-tile 3:4 cut-out category row
         ├── PromoGrid.tsx                # S04 Dark 4-up promo tiles with red scribble SVG (desktop)
@@ -68,65 +79,60 @@
         ├── TickerMarquee.tsx            # S14 Giant ticker marquee (white caps + icons)
         ├── RefinedBasicsSplit.tsx       # S15 Pinned media column + 2-col product grid
         ├── BrandFilm.tsx                # S16 Full-bleed brand film reel & video launcher
-        ├── TeaserReserve.tsx            # S17 "Something new is almost ready" 46.8px display & VIP waitlist
+        ├── TeaserReserve.tsx            # S17 "Something new is almost ready" display & VIP waitlist
         ├── LogoMarquee.tsx              # S18 Press logo infinite loop (Vogue, GQ, etc.)
         ├── BeforeAfterSlider.tsx        # S19 The Rhythm of Contrast with touch-action pointer capture
         ├── TestimonialsSection.tsx      # S20 5-star review carousel with reviewer & product tabs
         ├── BlogPostsStack.tsx           # S21 Sticky card-deck stacking blog posts
-        ├── NewsletterBand.tsx           # S22 "The Edit, In Your Inbox" 38.4px regular heading
+        ├── NewsletterBand.tsx           # S22 "The Edit, In Your Inbox" regular heading
         ├── SocialGrid.tsx               # S23 @RADIAN 3x2 full bleed Instagram square grid
-        ├── FAQAndTrust.tsx              # S24 FAQ accordions + S25 Trust strip
-        └── Footer.tsx                   # S26 Dark luxury footer + S27 bottom panel
+        └── FAQAndTrust.tsx              # S24 FAQ accordions + S25 Trust strip
 ```
 
 ---
 
-## 🏗️ Component Map & State Flow
+## 🏗️ Multi-Page & Master Scroll State Architecture
 
 ```text
                ┌────────────────────────────────────────────────────────┐
                │                      CartProvider                      │
-               │   (Cart, Drawers, Currency, PDP Route, Fly Animation)   │
+               │   (Synchronized Multi-Page Router & Global State)      │
                └──────────────────────────┬─────────────────────────────┘
                                           │
-        ┌─────────────────────────────────┼────────────────────────────────┐
-        ▼                                 ▼                                ▼
-┌───────────────┐               ┌───────────────────┐            ┌───────────────────┐
-│    Header     │               │   App (Router)    │            │     Overlays      │
-│  - S01 Marquee│               │                   │            │  - MenuDrawer     │
-│  - Pill Nav   │               └─────────┬─────────┘            │  - BagDrawer      │
-│  - Bag Counter│                         │                      │  - SearchPanel    │
-└───────────────┘            ┌────────────┴───────────┐          │  - DiscoverDrawer │
-                             ▼                        ▼          │  - PromoTabCard   │
-                   ┌───────────────────┐    ┌──────────────────┐ │  - StoriesViewer  │
-                   │ Standalone PDP    │    │ Master Scroll    │ │  - QuickViewModal │
-                   │ ProductDetailPage │    │ (27 Sections     │ │  - FlyToCartGhost │
-                   └───────────────────┘    │  Acts I - VII)   │ └───────────────────┘
-                                            └──────────────────┘
+        ┌──────────────────┬──────────────┼──────────────┬──────────────────┐
+        ▼                  ▼              ▼              ▼                  ▼
+┌──────────────┐   ┌──────────────┐ ┌───────────┐ ┌──────────────┐   ┌──────────────┐
+│  / (Home)    │   │ /collections │ │ /lookbook │ │   /maison    │   │   /reserve   │
+│  Flagship    │   │ Catalog Grid │ │ Hotspots  │ │ Atelier Code │   │  VIP Vault   │
+│  27 Sections │   │ Faceted Sort │ │ Diptychs  │ │ VIP Bookings │   │ Passes & Drops│
+└──────────────┘   └──────────────┘ └───────────┘ └──────────────┘   └──────────────┘
+        │                  │              │              │                  │
+        └──────────────────┴──────────────┼──────────────┴──────────────────┘
+                                          │
+                         ┌────────────────┴────────────────┐
+                         ▼                                 ▼
+               ┌───────────────────┐             ┌───────────────────┐
+               │   /product/:id    │             │      /studio      │
+               │  Standalone PDP   │             │   Brand Stream    │
+               │  Fit & Swatches   │             │ Recovery Studio   │
+               └───────────────────┘             └───────────────────┘
 ```
 
 ---
 
-## 📋 Work-In-Progress (WIP) Tracking & Milestone Status
+## 📋 Complete Feature & Implementation Matrix
 
 | Milestone / Feature Area | Target Spec | Implementation Status | Notes |
 |:---|:---|:---|:---|
-| **Master Scroll Map (S01–S27)** | Exact heights & act structure | ✅ Completed | 27 sections matching teardown wireframes |
-| **Sticky Curtain Hero (S02)** | Scales 1 $\to$ 0.85 & blurs on scroll | ✅ Completed | Fully responsive with touch hotspots |
-| **Dual Pinned Rails PDP (S13)** | Dual sticky rails at `top: 80px` | ✅ Completed | Left rail options, right rail accordions |
-| **Bundle Builder (S12)** | Pinned sticky card, 20% calculation | ✅ Completed | Interactive checkboxes with live summary |
-| **Full-Height Frosted Menu** | `inset-y-0`, `backdrop-blur-2xl` | ✅ Completed | Full screen height, glassmorphic styling |
-| **Standalone PDP (`ProductDetailPage`)** | Dedicated individual product pages | ✅ Completed | Cross-sell rail, model specs, size guide |
-| **Framer Motion Page Transitions** | Editorial glide & blur-in curve | ✅ Completed | `AnimatePresence mode="wait"`, easeOutQuint |
-| **AgentSam Assistant Dashboard** | Interactive loading tips carousel | ✅ Completed | 3D-styled cards, prompt launcher, file status |
-| **Touch & Drag Enhancements** | 120fps native drag feel | ✅ Completed | Pointer capture on slider, `touch-action: pan-x` |
-| **Mobile Header Optimization** | Zero overlap on 375–390px screens | ✅ Completed | Balanced brand mark and compact actions |
-| **Documentation & Repo Map** | README & FILEMAP | ✅ Completed | Full teardown reference & guide |
-
----
-
-## 🔮 Next Roadmap Enhancements (Ready for Prompting in AgentSam)
-1. **Dynamic 3D Fitting Avatar**: Integrate Three.js / WebGL model with real-time silhouette drape simulation.
-2. **Audio Atelier Concierge**: Connect with the Gemini Live API for real-time voice-driven luxury styling advisory.
-3. **Cryptographic Member Drop Vault**: Exclusive 6-digit passcode gate for 50 numbered archival pieces.
-4. **Geolocation Auto-Currency Switcher**: IP-grounded currency selection with pre-calculated import clearances.
+| **Master Scroll Map (S01–S27)** | Exact heights & act structure | ✅ 100% Preserved & Active | 27 sections matching teardown wireframes on `/` |
+| **Sticky Curtain Hero (S02)** | Scales 1 $\to$ 0.85 & blurs on scroll | ✅ 100% Preserved & Active | Fully responsive with touch hotspots |
+| **Dual Pinned Rails PDP (S13)** | Dual sticky rails at `top: 80px` | ✅ 100% Preserved & Active | Left rail options, right rail accordions |
+| **Bundle Builder (S12)** | Pinned sticky card, 20% calculation | ✅ 100% Preserved & Active | Interactive checkboxes with live summary |
+| **Full-Height Frosted Menu** | `inset-y-0`, `backdrop-blur-2xl` | ✅ Expanded to Multi-Page | Full screen height, glassmorphic styling |
+| **Standalone PDP (`ProductDetailPage`)** | Dedicated individual product pages | ✅ 100% Preserved & Active | Cross-sell rail, model specs, size guide |
+| **Framer Motion Transitions** | Page-level transitions | ✅ Active Across All Pages | Smooth cubic-bezier spring curves |
+| **Collections Catalog Page** | Faceted filters, grid toggle (2/3/4) | ✅ Added | Full catalog browser with live search |
+| **Lookbook Editorial Page** | Shoppable hotspot pins & chapters | ✅ Added | 3 chapters with 1-click garment buy |
+| **Maison & Provenance Page** | Heritage, slider & VIP bookings | ✅ Added | Before/after fabric slider & suite booking |
+| **VIP Drop Vault Page** | Countdown clocks, passes & unlocks | ✅ Added | Cryptographic invite code & serial pass |
+| **AgentSam Brand Stream Studio** | Deterministic brand recovery & cards | ✅ Added | Visual archaeology, receipts & inspector |

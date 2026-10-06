@@ -46,7 +46,7 @@ export function EditorialSceneGallery() {
             placeholder="Search gallery, PDP, drawer…"
             className="w-full border border-black/20 rounded-md px-4 py-3 bg-white text-black text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#657c70]" />
           <div className="flex flex-wrap gap-1.5 mt-4" role="group" aria-label="Scene type">
-            {["all", "section", "overlay", "header", "footer", "product-page", "studio"].map(kind=>
+            {["all", "section", "page", "overlay", "header", "footer", "product-page", "studio"].map(kind=>
               <button key={kind} type="button" aria-pressed={filter===kind} onClick={()=>setFilter(kind)}
                 className={"px-3 min-h-10 rounded-full text-[11px] font-semibold border capitalize " +
                   (filter===kind ? "bg-[#191e19] text-white border-[#191e19]" : "border-black/20 hover:bg-black/5")}>

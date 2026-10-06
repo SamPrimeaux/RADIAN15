@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Sparkles,
   ChevronLeft,
@@ -13,10 +13,16 @@ import {
   Smartphone,
   ExternalLink,
   RefreshCw,
-  Send
+  Send,
+  UploadCloud,
+  ShieldCheck,
+  Compass,
+  ShoppingBag,
+  Ticket
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useEditorialData } from '../portable/EditorialHost';
+import { PageRoute } from '../types';
 
 interface TipCard {
   id: string;
@@ -31,28 +37,28 @@ interface TipCard {
 const TIPS: TipCard[] = [
   {
     id: 'tip-1',
+    badge: 'BRAND ARCHAEOLOGY',
+    title: 'Visual Brand Stream Recovery',
+    description: 'Drop in raw ZIPs/folders to deterministically extract tokens, classify semantic asset roles, and render a dynamic multi-format visual workspace.',
+    suggestedPrompt: 'Open the Brand Stream Studio and inspect the deterministic recovery receipt for the current demo.',
+    iconBg: 'from-amber-500/20 via-rose-500/20 to-purple-500/20',
+    iconSvg: '✨'
+  },
+  {
+    id: 'tip-2',
     badge: 'LUXURY TAILORING',
     title: 'Bespoke Sizing & Virtual Fitting',
     description: 'Provide interactive model fit overlays that calculate shoulder-to-hem drape based on customer height and proportions.',
     suggestedPrompt: 'Add a 3D-styled interactive silhouette fit visualizer on the PDP with shoulder and sleeve measurements.',
-    iconBg: 'from-amber-500/20 via-rose-500/20 to-purple-500/20',
-    iconSvg: '👔'
-  },
-  {
-    id: 'tip-2',
-    badge: 'MULTIMODAL AI',
-    title: 'Transcribe Audio & Voice Concierge',
-    description: 'Allow VIP shoppers to speak their styling inquiries to hear instant audio recommendations from the connected storefront.',
-    suggestedPrompt: 'Integrate the Gemini Live API or voice recorder to provide real-time audio fashion advice.',
     iconBg: 'from-cyan-500/20 via-blue-500/20 to-indigo-500/20',
-    iconSvg: '🎙️'
+    iconSvg: '👔'
   },
   {
     id: 'tip-3',
     badge: 'COMMERCE ARCHITECTURE',
     title: 'Archive Private VIP Drop Vault',
     description: 'Create time-locked cryptographic invite drops where members enter one-time access keys to purchase small-batch runs.',
-    suggestedPrompt: 'Build a private vault section with a 6-digit passcode unlock and live stock countdown for 50 numbered pieces.',
+    suggestedPrompt: 'Test the VIP Vault section using passcode a configured invitation code to unlock limited-batch numbered allocations.',
     iconBg: 'from-emerald-500/20 via-teal-500/20 to-cyan-500/20',
     iconSvg: '🗝️'
   },
@@ -60,7 +66,7 @@ const TIPS: TipCard[] = [
     id: 'tip-4',
     badge: 'GLOBAL LOCALIZATION',
     title: 'Dynamic Currency & Duties Engine',
-    description: 'Auto-detect visitor geolocation to display local currencies (EUR, GBP, JPY, CAD) with pre-calculated import clearances.',
+    description: 'Auto-detect visitor geolocation to display local currencies (EUR, GBP, JPY, USD) with pre-calculated import clearances.',
     suggestedPrompt: 'Implement automatic IP-based currency switching with zero-surprise border fees.',
     iconBg: 'from-violet-500/20 via-fuchsia-500/20 to-pink-500/20',
     iconSvg: '🌐'
@@ -68,24 +74,24 @@ const TIPS: TipCard[] = [
   {
     id: 'tip-5',
     badge: 'EDITORIAL LOOKBOOKS',
-    title: 'Generative Lookbook Variations',
+    title: 'Interactive Shoppable Diptychs',
     description: 'Dynamically pair complementary garments into shoppable diptychs with automatic savings bundles.',
-    suggestedPrompt: 'Generate an editorial diptych showing evening outerwear styled with raw washed denim and leather accessories.',
+    suggestedPrompt: 'Explore the Editorial Lookbook chapters and hover over garment coordinate pins to buy looks directly.',
     iconBg: 'from-rose-500/20 via-red-500/20 to-amber-500/20',
-    iconSvg: '✨'
+    iconSvg: '📸'
   }
 ];
 
 const BUILT_FILES = [
-  { name: 'metadata.json', status: 'verified', lines: 7, desc: 'Branding & Capabilities' },
-  { name: 'src/components/Header.tsx', status: 'verified', lines: 175, desc: 'S01 Marquee + Floating Nav' },
-  { name: 'src/components/HeroCurtain.tsx', status: 'verified', lines: 198, desc: 'S02 Sticky Curtain Hero' },
-  { name: 'src/components/WardrobeGallery.tsx', status: 'verified', lines: 72, desc: 'S03 5-Tile Category Cutouts' },
-  { name: 'src/components/BundleBuilder.tsx', status: 'verified', lines: 174, desc: 'S12 Pinned Bundle Builder' },
-  { name: 'src/components/FeaturedPDP.tsx', status: 'verified', lines: 254, desc: 'S13 3-Column Pinned Rails PDP' },
-  { name: 'src/components/ProductDetailPage.tsx', status: 'verified', lines: 290, desc: 'Full Standalone PDP View' },
-  { name: 'src/components/MenuDrawer.tsx', status: 'verified', lines: 185, desc: 'Full-Height Glassmorphic Nav' },
-  { name: 'src/components/BagDrawer.tsx', status: 'verified', lines: 230, desc: 'Slide-Over Bag & Checkout' }
+  { name: 'src/components/pages/CollectionsPage.tsx', status: 'verified', lines: 285, desc: 'Faceted Catalog & Silhouettes' },
+  { name: 'src/components/pages/LookbookPage.tsx', status: 'verified', lines: 270, desc: 'Interactive Shoppable Editorial' },
+  { name: 'src/components/pages/MaisonPage.tsx', status: 'verified', lines: 290, desc: 'Heritage, Craft & Ateliers' },
+  { name: 'src/components/pages/ReserveVaultPage.tsx', status: 'verified', lines: 310, desc: 'Cryptographic VIP Drop Vault' },
+  { name: 'src/components/pages/BrandStreamPage.tsx', status: 'verified', lines: 420, desc: 'AgentSam Brand Stream & Recovery' },
+  { name: 'src/components/ProductDetailPage.tsx', status: 'verified', lines: 290, desc: 'Standalone Full PDP View' },
+  { name: 'src/context/CartContext.tsx', status: 'verified', lines: 250, desc: 'Synchronized Multi-Page Router' },
+  { name: 'src/components/Header.tsx', status: 'verified', lines: 220, desc: 'Universal Floating Navigation' },
+  { name: 'src/components/MenuDrawer.tsx', status: 'verified', lines: 240, desc: 'Full-Height Frosted Drill-Down' }
 ];
 
 export const AgentSamAssistant: React.FC = () => {
@@ -93,16 +99,15 @@ export const AgentSamAssistant: React.FC = () => {
   const {
     isAgentSamOpen,
     setIsAgentSamOpen,
-    setActiveProductPage,
+    navigateTo,
     setIsMenuOpen,
-    setIsBagOpen
+    setIsBagOpen,
+    currentPage
   } = useCart();
 
   const [activeTipIdx, setActiveTipIdx] = useState(0);
   const [copiedPrompt, setCopiedPrompt] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'tips' | 'files' | 'preview'>('tips');
-  const [isSimulatingBuild, setIsSimulatingBuild] = useState(false);
-  const [simulatedProgress, setSimulatedProgress] = useState(100);
 
   const currentTip = TIPS[activeTipIdx];
 
@@ -120,88 +125,60 @@ export const AgentSamAssistant: React.FC = () => {
     setActiveTipIdx(prev => (prev - 1 + TIPS.length) % TIPS.length);
   };
 
-  const triggerSimulateBuild = () => {
-    setIsSimulatingBuild(true);
-    setSimulatedProgress(15);
-    const interval = setInterval(() => {
-      setSimulatedProgress(p => {
-        if (p >= 100) {
-          clearInterval(interval);
-          setIsSimulatingBuild(false);
-          return 100;
-        }
-        return p + 25;
-      });
-    }, 350);
-  };
-
   return (
     <>
-      {/* Floating AgentSam Assistant Trigger Button */}
+      {/* Floating Trigger Button (Bottom-Left) */}
       <div className="fixed bottom-6 left-6 z-40">
         <button
           onClick={() => setIsAgentSamOpen(!isAgentSamOpen)}
-          className="group relative flex items-center gap-2.5 px-4 py-2.5 bg-[#121212]/90 hover:bg-black text-white text-xs font-semibold rounded-full border border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.5)] backdrop-blur-xl transition-all duration-300 hover:scale-105 cursor-pointer"
-          aria-label="Open AgentSam Assistant"
+          className="group flex items-center gap-2.5 px-4 py-2.5 bg-black/85 hover:bg-black text-white text-xs font-semibold rounded-full border border-white/20 shadow-[0_0_25px_rgba(139,24,27,0.4)] backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          aria-label="Open AgentSam Studio Companion"
         >
           <div className="relative flex items-center justify-center">
             <span className="w-2.5 h-2.5 rounded-full bg-[#8b181b] animate-ping absolute" />
-            <span className="w-2.5 h-2.5 rounded-full bg-[#8b181b] relative" />
+            <Sparkles className="w-4 h-4 text-[#e2a8aa] group-hover:rotate-12 transition-transform" />
           </div>
-          <span className="tracking-wider uppercase text-[11px] font-mono">AgentSam</span>
-          <span className="text-[10px] text-white/50 border-l border-white/20 pl-2">
-            Studio Assistant
+          <span className="tracking-wider uppercase font-mono">AgentSam Studio</span>
+          <span className="px-1.5 py-0.5 rounded text-[9px] font-mono bg-white/10 text-white/80 border border-white/10 uppercase">
+            {currentPage}
           </span>
-          <Sparkles className="w-3.5 h-3.5 text-[#e2a8aa] group-hover:rotate-12 transition-transform" />
         </button>
       </div>
 
-      {/* AgentSam Assistant Modal / Dashboard */}
+      {/* Full Modal Dashboard */}
       {isAgentSamOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-[themeReveal_0.3s_cubic-bezier(0.22,1,0.36,1)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <div
             onClick={() => setIsAgentSamOpen(false)}
-            className="fixed inset-0"
+            className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity"
           />
 
-          <div className="relative w-full max-w-4xl bg-[#0c0c0c] text-white border border-white/20 rounded-xl shadow-[0_20px_70px_rgba(0,0,0,0.9)] overflow-hidden z-10 flex flex-col max-h-[90vh]">
-            {/* Top Bar */}
-            <div className="px-6 py-4 bg-[#141414] border-b border-white/10 flex items-center justify-between">
+          <div className="relative w-full max-w-4xl max-h-[90vh] bg-[#0d0d0d] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-white animate-[themeReveal_0.4s_cubic-bezier(0.22,1,0.36,1)] z-10">
+            {/* Top Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 bg-[#141414] border-b border-white/10">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#8b181b] to-purple-600 flex items-center justify-center text-white shadow">
-                  <Sparkles className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#8b181b] to-black flex items-center justify-center border border-white/20">
+                  <Sparkles className="w-4 h-4 text-[#e2a8aa]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-bold tracking-wider uppercase text-white font-mono">
-                      AgentSam Studio Assistant
-                    </h3>
-                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-[#8b181b]/30 text-[#e2a8aa] border border-[#8b181b]/40 font-mono">
-                      v2.4 ACTIVE
+                    <span className="font-bold text-sm tracking-widest uppercase">AgentSam Studio</span>
+                    <span className="text-[10px] font-mono bg-[#8b181b]/30 text-[#e2a8aa] px-2 py-0.5 rounded border border-[#8b181b]/50 uppercase">
+                      v2.6.12 ARCHITECTURE
                     </span>
                   </div>
-                  <div className="text-[11px] text-white/50">
-                    Live architecture companion · Tips, file inspection & interactive loading simulator
-                  </div>
+                  <p className="text-[11px] text-white/60">
+                    Multi-Page Storefront & Brand Stream Recovery Engine
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={triggerSimulateBuild}
-                  disabled={isSimulatingBuild}
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white/15 text-white/80 rounded-md text-[11px] font-mono border border-white/10 transition-colors cursor-pointer"
-                >
-                  <RefreshCw className={`w-3.5 h-3.5 ${isSimulatingBuild ? 'animate-spin' : ''}`} />
-                  <span>{isSimulatingBuild ? 'Compiling...' : 'Simulate State'}</span>
-                </button>
-                <button
-                  onClick={() => setIsAgentSamOpen(false)}
-                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+              <button
+                onClick={() => setIsAgentSamOpen(false)}
+                className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
             {/* Navigation Tabs */}
@@ -218,53 +195,43 @@ export const AgentSamAssistant: React.FC = () => {
                 )}
               </button>
               <button
-                onClick={() => setActiveTab('files')}
-                className={`py-3 transition-colors relative cursor-pointer ${
-                  activeTab === 'files' ? 'text-white' : 'text-white/40 hover:text-white'
-                }`}
-              >
-                Architecture & Files ({BUILT_FILES.length})
-                {activeTab === 'files' && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#8b181b]" />
-                )}
-              </button>
-              <button
                 onClick={() => setActiveTab('preview')}
                 className={`py-3 transition-colors relative cursor-pointer ${
                   activeTab === 'preview' ? 'text-white' : 'text-white/40 hover:text-white'
                 }`}
               >
-                Page & View Switcher
+                Multi-Page Route Switcher
                 {activeTab === 'preview' && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#8b181b]" />
+                )}
+              </button>
+              <button
+                onClick={() => setActiveTab('files')}
+                className={`py-3 transition-colors relative cursor-pointer ${
+                  activeTab === 'files' ? 'text-white' : 'text-white/40 hover:text-white'
+                }`}
+              >
+                Architecture & Components ({BUILT_FILES.length})
+                {activeTab === 'files' && (
                   <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#8b181b]" />
                 )}
               </button>
             </div>
 
-            {/* Simulated Live Loading Bar */}
-            {isSimulatingBuild && (
-              <div className="w-full bg-white/10 h-1 overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-[#8b181b] via-purple-500 to-[#8b181b] h-full transition-all duration-300"
-                  style={{ width: `${simulatedProgress}%` }}
-                />
-              </div>
-            )}
-
             {/* Tab Body */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              {/* TAB 1: TIPS & PROMPTS (Matching user's Screenshot 1 carousel) */}
+              {/* TAB 1: TIPS & PROMPTS */}
               {activeTab === 'tips' && (
                 <div className="space-y-6">
                   <div className="text-center space-y-1">
                     <span className="text-[10px] uppercase tracking-[0.25em] text-[#e2a8aa] font-mono">
-                      GENERATING APP ARCHITECTURE
+                      LUXURY E-COMMERCE & BRAND ARCHAEOLOGY
                     </span>
                     <h4 className="text-2xl font-bold tracking-tight text-white">
-                      Enjoy these tips while you wait
+                      Actionable Prompts & Architectural Patterns
                     </h4>
                     <p className="text-xs text-white/60">
-                      Curated luxury feature prompts you can copy or explore next.
+                      Copy any prompt below to explore features or test new workflows.
                     </p>
                   </div>
 
@@ -283,8 +250,7 @@ export const AgentSamAssistant: React.FC = () => {
                       <div className={`absolute -top-24 -right-24 w-56 h-56 rounded-full bg-gradient-to-br ${currentTip.iconBg} blur-3xl pointer-events-none`} />
 
                       <div className="relative z-10 space-y-4 text-center">
-                        {/* 3D-styled Icon Emblem */}
-                        <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-white/10 via-white/5 to-transparent border border-white/20 shadow-inner flex items-center justify-center text-4xl transform hover:scale-110 transition-transform">
+                        <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-white/10 via-white/5 to-transparent border border-white/20 shadow-inner flex items-center justify-center text-3xl transform hover:scale-110 transition-transform">
                           {currentTip.iconSvg}
                         </div>
 
@@ -354,52 +320,51 @@ export const AgentSamAssistant: React.FC = () => {
                 </div>
               )}
 
-              {/* TAB 2: ARCHITECTURE & FILES */}
-              {activeTab === 'files' && (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between text-xs text-white/60 font-mono border-b border-white/10 pb-2">
-                    <span>MODULE / COMPONENT</span>
-                    <span>STATUS</span>
-                  </div>
-                  <div className="space-y-2">
-                    {BUILT_FILES.map(file => (
-                      <div
-                        key={file.name}
-                        className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition-all font-mono text-xs"
-                      >
-                        <div className="flex items-center gap-3">
-                          <FileCode className="w-4 h-4 text-[#8b181b]" />
-                          <div>
-                            <div className="font-semibold text-white">{file.name}</div>
-                            <div className="text-[10px] text-white/50">{file.desc}</div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-[11px] text-white/40">{file.lines} lines</span>
-                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                            <Check className="w-3 h-3" />
-                            <span>Pristine</span>
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 3: PAGE & VIEW SWITCHER */}
+              {/* TAB 2: PAGE ROUTER */}
               {activeTab === 'preview' && (
                 <div className="space-y-6">
                   <div>
                     <h5 className="text-xs uppercase tracking-wider text-white/60 font-mono mb-3">
-                      QUICK LAUNCH INDIVIDUAL PRODUCT PAGES (PDP):
+                      FAST JUMP TO ANY MULTI-PAGE ROUTE:
+                    </h5>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 font-mono text-xs">
+                      {[
+                        { name: 'Flagship Storefront', route: 'home' as PageRoute, desc: '27-Section Master Scroll' },
+                        { name: 'Collections & Archive', route: 'collections' as PageRoute, desc: 'Faceted Catalog Grid' },
+                        { name: 'Editorial Lookbook', route: 'lookbook' as PageRoute, desc: 'Shoppable Hotspots & Diptychs' },
+                        { name: 'Maison & Ateliers', route: 'maison' as PageRoute, desc: 'Provenance & VIP Bookings' },
+                        { name: 'VIP Drop Vault', route: 'reserve' as PageRoute, desc: 'Cryptographic Drops & Passes' },
+                        { name: 'Brand Stream Studio', route: 'studio' as PageRoute, desc: 'Visual Archaeology & Ingest' }
+                      ].map(pg => (
+                        <button
+                          key={pg.route}
+                          onClick={() => {
+                            navigateTo(pg.route);
+                            setIsAgentSamOpen(false);
+                          }}
+                          className={`p-3.5 rounded-lg border text-left transition-all cursor-pointer ${
+                            currentPage === pg.route
+                              ? 'bg-[#8b181b]/30 border-[#8b181b] text-white font-bold'
+                              : 'bg-white/5 border-white/10 hover:border-white/30 text-neutral-300'
+                          }`}
+                        >
+                          <div className="font-semibold text-white uppercase">{pg.name}</div>
+                          <div className="text-[10px] text-neutral-400 mt-1">{pg.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-white/10">
+                    <h5 className="text-xs uppercase tracking-wider text-white/60 font-mono mb-3">
+                      STANDALONE PRODUCT DETAIL PAGES (PDP):
                     </h5>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {PRODUCTS.slice(0, 4).map(p => (
                         <button
                           key={p.id}
                           onClick={() => {
-                            setActiveProductPage(p);
+                            navigateTo('pdp', { productId: p.id });
                             setIsAgentSamOpen(false);
                           }}
                           className="flex items-center gap-3 p-3 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 text-left transition-colors cursor-pointer group"
@@ -424,26 +389,38 @@ export const AgentSamAssistant: React.FC = () => {
                       ))}
                     </div>
                   </div>
+                </div>
+              )}
 
-                  <div className="pt-4 border-t border-white/10 flex flex-wrap gap-3">
-                    <button
-                      onClick={() => {
-                        setIsMenuOpen(true);
-                        setIsAgentSamOpen(false);
-                      }}
-                      className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded text-xs font-mono transition-colors"
-                    >
-                      Open Full-Height Menu Drawer
-                    </button>
-                    <button
-                      onClick={() => {
-                        setIsBagOpen(true);
-                        setIsAgentSamOpen(false);
-                      }}
-                      className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded text-xs font-mono transition-colors"
-                    >
-                      Open Cart Slide-Over
-                    </button>
+              {/* TAB 3: ARCHITECTURE & FILES */}
+              {activeTab === 'files' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-xs text-white/60 font-mono border-b border-white/10 pb-2">
+                    <span>MODULE / COMPONENT</span>
+                    <span>STATUS</span>
+                  </div>
+                  <div className="space-y-2">
+                    {BUILT_FILES.map(file => (
+                      <div
+                        key={file.name}
+                        className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5 hover:border-white/20 transition-all font-mono text-xs"
+                      >
+                        <div className="flex items-center gap-3">
+                          <FileCode className="w-4 h-4 text-[#8b181b]" />
+                          <div>
+                            <div className="font-semibold text-white">{file.name}</div>
+                            <div className="text-[10px] text-white/50">{file.desc}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-[11px] text-white/40">{file.lines} lines</span>
+                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                            <Check className="w-3 h-3" />
+                            <span>Verified</span>
+                          </span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
@@ -453,7 +430,7 @@ export const AgentSamAssistant: React.FC = () => {
             <div className="px-6 py-3 bg-[#111111] border-t border-white/10 flex items-center justify-between text-[11px] text-white/50 font-mono">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span>Dev Server Running on Port 3000 · HMR Optimized</span>
+                <span>Multi-Page Router Synchronized · Port 3000 Ready</span>
               </div>
               <span className="hidden sm:inline">Press Esc to dismiss</span>
             </div>

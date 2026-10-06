@@ -42,6 +42,13 @@ import { FlyToCartGhost } from './components/FlyToCartGhost';
 import { ProductDetailPage } from './components/ProductDetailPage';
 import { AgentSamAssistant } from './components/AgentSamAssistant';
 
+// Multi-Page Views
+import { CollectionsPage } from './components/pages/CollectionsPage';
+import { LookbookPage } from './components/pages/LookbookPage';
+import { MaisonPage } from './components/pages/MaisonPage';
+import { ReserveVaultPage } from './components/pages/ReserveVaultPage';
+import { BrandStreamPage } from './components/pages/BrandStreamPage';
+
 // High-Fashion Editorial Page Transition Variants
 const pageVariants: Variants = {
   initial: {
@@ -56,7 +63,7 @@ const pageVariants: Variants = {
     scale: 1,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.52,
+      duration: 0.45,
       ease: [0.22, 1, 0.36, 1]
     }
   },
@@ -66,31 +73,45 @@ const pageVariants: Variants = {
     scale: 0.995,
     filter: 'blur(2px)',
     transition: {
-      duration: 0.38,
+      duration: 0.32,
       ease: [0.65, 0, 0.35, 1]
     }
   }
 };
 
 const MainStoreContent: React.FC = () => {
-  const { activeProductPage } = useCart();
-  const currentKey = activeProductPage ? `pdp-${activeProductPage.id}` : 'storefront-main';
+  const { currentPage, activeProductPage } = useCart();
+
+  const getPageKey = () => {
+    if (currentPage === 'pdp' && activeProductPage) return `pdp-${activeProductPage.id}`;
+    return `page-${currentPage}`;
+  };
 
   return (
     <AnimatePresence mode="wait">
       <motion.main
-        key={currentKey}
+        key={getPageKey()}
         variants={pageVariants}
         initial="initial"
         animate="animate"
         exit="exit"
         className="w-full will-change-transform"
       >
-        {activeProductPage ? (
-          /* Dedicated Standalone Product Details Page */
+        {/* PAGE ROUTER */}
+        {currentPage === 'pdp' ? (
           <ProductDetailPage />
+        ) : currentPage === 'collections' ? (
+          <CollectionsPage />
+        ) : currentPage === 'lookbook' ? (
+          <LookbookPage />
+        ) : currentPage === 'maison' ? (
+          <MaisonPage />
+        ) : currentPage === 'reserve' ? (
+          <ReserveVaultPage />
+        ) : currentPage === 'studio' ? (
+          <BrandStreamPage />
         ) : (
-          /* Master Scroll Map Sequence (27 Sections) */
+          /* MASTER SCROLL FLAGSHIP STOREFRONT (27 SECTIONS ACROSS ACTS I - VII) */
           <>
             {/* ACT I: THE ENTRANCE */}
             {/* S02: Sticky Curtain Hero with Hotspots */}
@@ -174,7 +195,7 @@ const MainStoreContent: React.FC = () => {
 export default function App() {
   const params = new URLSearchParams(window.location.search);
   const selectedScene = params.get('scene');
-  if (selectedScene) return <EditorialScene id={selectedScene} />;
+  if (selectedScene) return <EditorialScene id={selectedScene} brand={params.has('brand') ? { name: params.get('brand') ?? 'FORM / 26' } : undefined} />;
   if (params.has('gallery')) return <EditorialSceneGallery />;
   return (
     <EditorialHostProvider>
@@ -196,7 +217,7 @@ export default function App() {
         {/* Built-in AgentSam Assistant Dashboard with Interactive Tips */}
         {params.has('studio') && <AgentSamAssistant />}
 
-        {/* Main Storefront or Dedicated PDP View with Framer Motion Page Transitions */}
+        {/* Main Storefront or Dedicated Multi-Page View with Framer Motion Page Transitions */}
         <MainStoreContent />
 
         {/* S26 & S27: Footer & Bottom Panel */}

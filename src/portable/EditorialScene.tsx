@@ -7,6 +7,9 @@ import type { EditorialBrand, EditorialCatalog, EditorialCommerceAdapter } from 
 const modules = import.meta.glob("../components/*.tsx", { eager: true }) as Record<
   string, Record<string, React.ComponentType>
 >;
+const pageModules = import.meta.glob("../components/pages/*.tsx", { eager: true }) as Record<
+  string, Record<string, React.ComponentType>
+>;
 
 export interface EditorialSceneProps {
   id: string;
@@ -59,7 +62,9 @@ export function EditorialScene({
       Unknown editorial scene: {id}
     </div>;
   }
-  const Component = modules["../components/" + scene.component + ".tsx"]?.[scene.component];
+  const Component = (scene.kind === "page"
+    ? pageModules["../components/pages/" + scene.component + ".tsx"]
+    : modules["../components/" + scene.component + ".tsx"])?.[scene.component];
   if (!Component) {
     return <div role="alert">Scene source missing: {scene.component}</div>;
   }

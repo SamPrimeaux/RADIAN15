@@ -1,8 +1,8 @@
-import { useEditorialBrand } from '../portable/EditorialHost';
 import React, { useState } from 'react';
-import { ChevronRight, ArrowLeft, X, Globe, User, Sparkles, ExternalLink } from 'lucide-react';
+import { ChevronRight, ArrowLeft, X, Globe, User, Sparkles, ExternalLink, Layers, ShieldCheck, Ticket } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { useEditorialData } from '../portable/EditorialHost';
+import { useEditorialBrand, useEditorialData } from '../portable/EditorialHost';
+import { PageRoute } from '../types';
 
 export const MenuDrawer: React.FC = () => {
   const brand = useEditorialBrand();
@@ -12,18 +12,18 @@ export const MenuDrawer: React.FC = () => {
     setIsMenuOpen,
     currency,
     setCurrency,
-    setActiveProductPage
+    navigateTo
   } = useCart();
   const [currentPanel, setCurrentPanel] = useState<'root' | 'shop' | 'material'>('root');
 
   if (!isMenuOpen) return null;
 
   const handleOpenProduct = (productId: string) => {
-    const prod = PRODUCTS.find(p => p.id === productId);
-    if (prod) {
-      setActiveProductPage(prod);
-      setIsMenuOpen(false);
-    }
+    navigateTo('pdp', { productId });
+  };
+
+  const handleNavigatePage = (page: PageRoute, category?: string) => {
+    navigateTo(page, { category });
   };
 
   return (
@@ -36,10 +36,10 @@ export const MenuDrawer: React.FC = () => {
 
       {/* FULL SCREEN HEIGHT Glassmorphic / Frosted Left Sheet Drawer */}
       <div
-        className="absolute inset-y-0 left-0 w-full max-w-[640px] h-full bg-[#0a0a0a]/85 backdrop-blur-2xl text-white border-r border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.9)] flex flex-col justify-between overflow-hidden animate-[themeReveal_0.4s_cubic-bezier(0.22,1,0.36,1)] z-10"
+        className="absolute inset-y-0 left-0 w-full max-w-[640px] h-full bg-[#0a0a0a]/90 backdrop-blur-2xl text-white border-r border-white/15 shadow-[0_0_60px_rgba(0,0,0,0.9)] flex flex-col justify-between overflow-hidden animate-[themeReveal_0.4s_cubic-bezier(0.22,1,0.36,1)] z-10"
       >
-        {/* Top Header inside drawer: Full brand lockup and close X */}
-        <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-white/10 bg-black/30 backdrop-blur-md">
+        {/* Top Header inside drawer */}
+        <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-white/10 bg-black/40 backdrop-blur-md">
           <div className="flex items-center gap-3">
             <span className="text-[#8b181b] text-xs">◆</span>
             <span className="font-semibold tracking-[0.3em] uppercase text-sm sm:text-base">{brand.name}</span>
@@ -56,12 +56,26 @@ export const MenuDrawer: React.FC = () => {
           </button>
         </div>
 
-        {/* Scrollable Navigation Body with Push Drill-down */}
+        {/* Scrollable Navigation Body */}
         <div className="flex-1 overflow-y-auto px-6 sm:px-8 py-6 space-y-6">
           {currentPanel === 'root' && (
             <div className="space-y-6">
-              {/* Primary Drill-down links */}
-              <div className="space-y-3 text-[19px] sm:text-[21px] font-light tracking-[0.08em] uppercase">
+              {/* Primary Pages Directory */}
+              <div className="space-y-2 text-[18px] sm:text-[20px] font-light tracking-[0.08em] uppercase">
+                <button
+                  onClick={() => handleNavigatePage('home')}
+                  className="w-full text-left py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300 cursor-pointer block"
+                >
+                  FLAGSHIP STOREFRONT
+                </button>
+
+                <button
+                  onClick={() => handleNavigatePage('collections')}
+                  className="w-full text-left py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300 cursor-pointer block"
+                >
+                  COLLECTIONS & ARCHIVE
+                </button>
+
                 <button
                   onClick={() => setCurrentPanel('shop')}
                   className="w-full flex items-center justify-between py-2 text-left hover:text-[#e2a8aa] transition-colors group cursor-pointer"
@@ -73,62 +87,87 @@ export const MenuDrawer: React.FC = () => {
                 </button>
 
                 <button
-                  onClick={() => setCurrentPanel('material')}
-                  className="w-full flex items-center justify-between py-2 text-left hover:text-[#e2a8aa] transition-colors group cursor-pointer"
+                  onClick={() => handleNavigatePage('lookbook')}
+                  className="w-full text-left py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300 cursor-pointer block"
                 >
-                  <span className="group-hover:translate-x-2 transition-transform duration-300">
-                    MATERIALS & CRAFT
-                  </span>
-                  <ChevronRight className="w-5 h-5 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  EDITORIAL LOOKBOOK
                 </button>
 
-                <a
-                  href="#collection-tab"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300"
-                >
-                  ALL COLLECTIONS
-                </a>
-                <a
-                  href="#bundle"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300"
-                >
-                  BETTER TOGETHER BUNDLES
-                </a>
                 <button
-                  onClick={() => handleOpenProduct('leather-tee')}
-                  className="w-full text-left py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300 flex items-center justify-between group cursor-pointer"
+                  onClick={() => handleNavigatePage('maison')}
+                  className="w-full text-left py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300 cursor-pointer block"
                 >
-                  <span>FEATURED CALFSKIN TEE (PDP)</span>
-                  <ExternalLink className="w-4 h-4 opacity-40 group-hover:opacity-100" />
+                  MAISON & ATELIERS
                 </button>
+
                 <button
-                  onClick={() => handleOpenProduct('sable-blazer')}
-                  className="w-full text-left py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300 flex items-center justify-between group cursor-pointer"
+                  onClick={() => handleNavigatePage('reserve')}
+                  className="w-full text-left py-2 hover:text-[#e2a8aa] transition-colors hover:translate-x-2 duration-300 cursor-pointer flex items-center justify-between group"
                 >
-                  <span>SABLE WOOL BLAZER (PDP)</span>
-                  <ExternalLink className="w-4 h-4 opacity-40 group-hover:opacity-100" />
+                  <span>VIP DROP VAULT</span>
+                  <Ticket className="w-4 h-4 text-[#e2a8aa] opacity-70 group-hover:opacity-100" />
+                </button>
+
+                <button
+                  onClick={() => handleNavigatePage('studio')}
+                  className="w-full text-left py-2.5 px-3 bg-white/5 border border-[#8b181b]/40 rounded hover:bg-[#8b181b]/20 text-[#e2a8aa] transition-all hover:translate-x-1 duration-300 cursor-pointer flex items-center justify-between group"
+                >
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-[#e2a8aa]" />
+                    <span className="font-semibold">BRAND STREAM STUDIO</span>
+                  </div>
+                  <span className="text-[9px] font-mono uppercase bg-[#8b181b] text-white px-2 py-0.5 rounded">
+                    NEW
+                  </span>
                 </button>
               </div>
 
-              <div className="h-[1px] bg-white/10 my-6" />
+              <div className="h-[1px] bg-white/10 my-4" />
 
-              {/* "Find Your Inspiration" Horizontal Card Rail */}
+              {/* Direct PDP quick links */}
+              <div className="space-y-2">
+                <span className="text-[10px] tracking-[0.2em] text-white/50 uppercase font-mono block mb-2">
+                  ICONIC SILHOUETTE SPOTLIGHTS (PDP)
+                </span>
+                <button
+                  onClick={() => handleOpenProduct('leather-tee')}
+                  className="w-full text-left py-1.5 text-xs text-neutral-300 hover:text-white transition-colors flex items-center justify-between cursor-pointer"
+                >
+                  <span>Calfskin Leather Tee ($325)</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-50" />
+                </button>
+                <button
+                  onClick={() => handleOpenProduct('sable-blazer')}
+                  className="w-full text-left py-1.5 text-xs text-neutral-300 hover:text-white transition-colors flex items-center justify-between cursor-pointer"
+                >
+                  <span>Sable Wool Blazer ($480)</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-50" />
+                </button>
+                <button
+                  onClick={() => handleOpenProduct('matrix-mini-dress')}
+                  className="w-full text-left py-1.5 text-xs text-neutral-300 hover:text-white transition-colors flex items-center justify-between cursor-pointer"
+                >
+                  <span>Matrix Lambskin Dress ($185)</span>
+                  <ExternalLink className="w-3.5 h-3.5 opacity-50" />
+                </button>
+              </div>
+
+              <div className="h-[1px] bg-white/10 my-4" />
+
+              {/* Inspiration Category Horizontal Rail */}
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-[11px] uppercase tracking-[0.2em] text-white/50 font-semibold">
-                    FIND YOUR INSPIRATION
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-semibold font-mono">
+                    CATEGORIES ARCHIVE
                   </div>
-                  <span className="text-[10px] text-[#e2a8aa] tracking-widest uppercase">5 CURATIONS</span>
+                  <span className="text-[9px] text-[#e2a8aa] tracking-widest uppercase font-mono">5 SILHOUETTES</span>
                 </div>
-                <div className="flex gap-4 overflow-x-auto pb-4 snap-x no-scrollbar">
+                <div className="flex gap-3 overflow-x-auto pb-3 snap-x no-scrollbar">
                   {CATEGORIES_WARDROBE.map(cat => (
-                    <a
+                    <button
                       key={cat.id}
-                      href={cat.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="group shrink-0 w-[180px] snap-start bg-white/5 rounded-sm overflow-hidden border border-white/10 hover:border-white/30 backdrop-blur-sm transition-all"
+                      onClick={() => handleNavigatePage('collections', cat.name)}
+                      className="group shrink-0 w-[140px] snap-start bg-white/5 rounded-xs overflow-hidden border border-white/10 hover:border-white/30 backdrop-blur-sm transition-all text-left cursor-pointer"
                     >
                       <div className="aspect-[3/4] relative overflow-hidden bg-neutral-900">
                         <img
@@ -137,14 +176,14 @@ export const MenuDrawer: React.FC = () => {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                        <div className="absolute bottom-2.5 left-2.5 right-2.5">
-                          <div className="text-[12px] font-semibold tracking-wider uppercase text-white">
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <div className="text-[11px] font-semibold tracking-wider uppercase text-white">
                             {cat.name}
                           </div>
-                          <div className="text-[10px] text-white/60">{cat.count}</div>
+                          <div className="text-[9px] text-white/60 font-mono">{cat.count}</div>
                         </div>
                       </div>
-                    </a>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -162,140 +201,87 @@ export const MenuDrawer: React.FC = () => {
                 <span>Back to Directory</span>
               </button>
 
-              <div className="space-y-7 pt-2">
+              <div className="space-y-6 pt-2">
                 <div>
-                  <span className="text-[10px] tracking-[0.25em] text-white/40 uppercase font-semibold block mb-2.5">
-                    BLAZERS & TAILORING
+                  <span className="text-[10px] tracking-[0.25em] text-white/40 uppercase font-semibold block mb-2.5 font-mono">
+                    LEATHER & TAILORING
                   </span>
-                  <div className="space-y-2.5 pl-2 text-[15px]">
+                  <div className="space-y-2 pl-2 text-[14px]">
                     <button
                       onClick={() => handleOpenProduct('sable-blazer')}
-                      className="block text-left text-white/90 hover:text-[#e2a8aa] transition-colors cursor-pointer"
+                      className="block text-left text-white/90 hover:text-white hover:translate-x-1.5 transition-all cursor-pointer"
                     >
-                      Sable Wool Blazer (Dedicated Page) →
-                    </button>
-                    <a href="#collection-tab" onClick={() => setIsMenuOpen(false)} className="block text-white/70 hover:text-white transition-colors">
-                      Slouchy Double-Pleat Culottes
-                    </a>
-                  </div>
-                </div>
-
-                <div>
-                  <span className="text-[10px] tracking-[0.25em] text-white/40 uppercase font-semibold block mb-2.5">
-                    LEATHER & OUTERWEAR
-                  </span>
-                  <div className="space-y-2.5 pl-2 text-[15px]">
-                    <button
-                      onClick={() => handleOpenProduct('leather-tee')}
-                      className="block text-left text-white/90 hover:text-[#e2a8aa] transition-colors cursor-pointer"
-                    >
-                      Architectural Calfskin Tee (Dedicated Page) →
-                    </button>
-                    <button
-                      onClick={() => handleOpenProduct('kuro-jacket')}
-                      className="block text-left text-white/90 hover:text-[#e2a8aa] transition-colors cursor-pointer"
-                    >
-                      Kuro Washed Biker Jacket (Dedicated Page) →
+                      Sable Wool Blazer
                     </button>
                     <button
                       onClick={() => handleOpenProduct('sharp-leather-trench')}
-                      className="block text-left text-white/90 hover:text-[#e2a8aa] transition-colors cursor-pointer"
+                      className="block text-left text-white/90 hover:text-white hover:translate-x-1.5 transition-all cursor-pointer"
                     >
-                      Sharp Leather Trench (Dedicated Page) →
+                      Sharp Leather Trench
+                    </button>
+                    <button
+                      onClick={() => handleOpenProduct('kuro-jacket')}
+                      className="block text-left text-white/90 hover:text-white hover:translate-x-1.5 transition-all cursor-pointer"
+                    >
+                      Kuro Washed Jacket
+                    </button>
+                    <button
+                      onClick={() => handleNavigatePage('collections', 'LEATHER')}
+                      className="block text-left text-[#e2a8aa] text-xs pt-1 uppercase tracking-wider cursor-pointer"
+                    >
+                      View All Leather & Tailoring →
                     </button>
                   </div>
                 </div>
 
                 <div>
-                  <span className="text-[10px] tracking-[0.25em] text-white/40 uppercase font-semibold block mb-2.5">
-                    TOPS & SECOND SKINS
+                  <span className="text-[10px] tracking-[0.25em] text-white/40 uppercase font-semibold block mb-2.5 font-mono">
+                    TOPS & SECOND-SKINS
                   </span>
-                  <div className="space-y-2.5 pl-2 text-[15px]">
+                  <div className="space-y-2 pl-2 text-[14px]">
                     <button
-                      onClick={() => handleOpenProduct('calm-pullover')}
-                      className="block text-left text-white/90 hover:text-[#e2a8aa] transition-colors cursor-pointer"
+                      onClick={() => handleOpenProduct('leather-tee')}
+                      className="block text-left text-white/90 hover:text-white hover:translate-x-1.5 transition-all cursor-pointer"
                     >
-                      Calm Cashmere Pullover →
+                      Calfskin Leather Tee
                     </button>
                     <button
                       onClick={() => handleOpenProduct('merino-turtleneck')}
-                      className="block text-left text-white/90 hover:text-[#e2a8aa] transition-colors cursor-pointer"
+                      className="block text-left text-white/90 hover:text-white hover:translate-x-1.5 transition-all cursor-pointer"
                     >
-                      Merino Second-Skin Turtleneck →
+                      Merino Second-Skin Turtleneck
+                    </button>
+                    <button
+                      onClick={() => handleNavigatePage('collections', 'TOPS')}
+                      className="block text-left text-[#e2a8aa] text-xs pt-1 uppercase tracking-wider cursor-pointer"
+                    >
+                      View All Tops →
                     </button>
                   </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Sub-Panel: Materials */}
-          {currentPanel === 'material' && (
-            <div className="space-y-6">
-              <button
-                onClick={() => setCurrentPanel('root')}
-                className="flex items-center gap-2 text-[12px] uppercase tracking-widest text-[#e2a8aa] font-medium hover:text-white transition-colors cursor-pointer"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back to Directory</span>
-              </button>
-
-              <div className="space-y-4 pt-2 text-white/80 text-[13px] leading-relaxed">
-                <div className="p-4 bg-white/5 rounded-sm border border-white/10 backdrop-blur-sm">
-                  <div className="text-[13px] font-semibold text-white tracking-wider uppercase mb-1">
-                    Vegetable-Tanned European Calfskin
-                  </div>
-                  <p className="text-white/60 text-xs leading-relaxed">
-                    Drum-tumbled with organic chestnut and mimosa tannins in Florence. Develops a personal patina that deepens with every wear.
-                  </p>
-                </div>
-                <div className="p-4 bg-white/5 rounded-sm border border-white/10 backdrop-blur-sm">
-                  <div className="text-[13px] font-semibold text-white tracking-wider uppercase mb-1">
-                    380gsm English Wool Crepe
-                  </div>
-                  <p className="text-white/60 text-xs leading-relaxed">
-                    Woven in Yorkshire with high-twist yarn for fluid drape, natural thermal memory, and structural crispness.
-                  </p>
-                </div>
-                <div className="p-4 bg-white/5 rounded-sm border border-white/10 backdrop-blur-sm">
-                  <div className="text-[13px] font-semibold text-white tracking-wider uppercase mb-1">
-                    16-Gauge Australian Merino
-                  </div>
-                  <p className="text-white/60 text-xs leading-relaxed">
-                    Seamless circular knit construction engineered to contour the body with breathable second-skin comfort.
-                  </p>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Footer actions pinned at bottom of full-screen drawer */}
-        <div className="px-6 sm:px-8 py-5 border-t border-white/10 bg-black/40 backdrop-blur-md flex items-center justify-between text-[12px] uppercase tracking-wider">
+        {/* Footer info inside Drawer */}
+        <div className="p-6 sm:p-8 border-t border-white/10 bg-black/60 flex items-center justify-between text-xs text-neutral-400">
           <div className="flex items-center gap-2">
-            <Globe className="w-4 h-4 text-white/50" />
+            <Globe className="w-3.5 h-3.5" />
             <select
               value={currency}
               onChange={e => setCurrency(e.target.value)}
               className="bg-transparent text-white focus:outline-none cursor-pointer"
             >
-              <option value="USD" className="bg-neutral-900 text-white">USD ($)</option>
-              <option value="EUR" className="bg-neutral-900 text-white">EUR (€)</option>
-              <option value="GBP" className="bg-neutral-900 text-white">GBP (£)</option>
-              <option value="JPY" className="bg-neutral-900 text-white">JPY (¥)</option>
+              <option value="USD" className="text-black bg-white">USD ($)</option>
+              <option value="EUR" className="text-black bg-white">EUR (€)</option>
+              <option value="GBP" className="text-black bg-white">GBP (£)</option>
+              <option value="JPY" className="text-black bg-white">JPY (¥)</option>
             </select>
           </div>
-
-          <button
-            onClick={() => {
-              setIsMenuOpen(false);
-              alert('Customer Account Portal: VIP members can access tailoring preferences and bespoke orders.');
-            }}
-            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors font-medium cursor-pointer"
-          >
-            <User className="w-4 h-4" />
-            <span>SIGN IN / ACCOUNT</span>
-          </button>
+          <span className="text-[10px] font-mono tracking-widest text-[#e2a8aa]">
+            © 2026 {brand.name} · Editorial concept
+          </span>
         </div>
       </div>
     </div>

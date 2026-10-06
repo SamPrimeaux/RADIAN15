@@ -158,9 +158,9 @@ export const DiscoverDrawer: React.FC = () => {
                   <Tag className="w-3.5 h-3.5" />
                   <span>WELCOME CODE</span>
                 </div>
-                <div className="text-lg font-mono tracking-wider font-bold text-white">RADIAN15</div>
+                <div className="text-lg font-mono tracking-wider font-bold text-white">DEMO15</div>
                 <p className="text-xs text-white/60 mt-1">
-                  15% privilege discount on all non-archive orders over $100.
+                  Example discount appearance only. Not valid at checkout.
                 </p>
               </div>
 

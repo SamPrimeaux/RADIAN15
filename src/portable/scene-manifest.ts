@@ -1,5 +1,5 @@
 export type EditorialSceneKind =
-  | "section" | "header" | "footer" | "overlay" | "product-page" | "studio";
+  | "section" | "header" | "footer" | "overlay" | "product-page" | "page" | "studio";
 
 export type EditorialSceneStatus =
   | "adapted-catalog" | "legacy-interaction" | "studio-only";
@@ -27,10 +27,10 @@ const support = (
   kind: EditorialSceneKind, status: EditorialSceneStatus,
 ): EditorialSceneSpec => ({
   id, component, title,
-  act: kind === "overlay" ? "Global UI" : kind === "studio" ? "Studio" : "Shell",
+  act: kind === "overlay" ? "Global UI" : kind === "studio" ? "Studio" : kind === "page" ? "Standalone pages" : "Shell",
   kind, status,
-  source: "src/components/" + component + ".tsx",
-  customerFacing: kind !== "studio",
+  source: "src/components/" + (kind === "page" ? "pages/" : "") + component + ".tsx",
+  customerFacing: kind !== "studio" && component !== "BrandStreamPage",
 });
 
 /** Every original React scene has a discoverable, stable, brand-neutral ID. */
@@ -68,6 +68,11 @@ export const EDITORIAL_SCENES: readonly EditorialSceneSpec[] = Object.freeze([
   support("quick-view", "QuickViewModal", "Quick product view", "overlay", "legacy-interaction"),
   support("fly-to-cart", "FlyToCartGhost", "Cart microinteraction", "overlay", "legacy-interaction"),
   support("product-page", "ProductDetailPage", "Individual product page", "product-page", "legacy-interaction"),
+  support("collections-page", "CollectionsPage", "Collections / Archive", "page", "legacy-interaction"),
+  support("lookbook-page", "LookbookPage", "Editorial Lookbook", "page", "legacy-interaction"),
+  support("maison-page", "MaisonPage", "Maison / Atelier", "page", "legacy-interaction"),
+  support("reserve-page", "ReserveVaultPage", "Reserve / Preview vault", "page", "legacy-interaction"),
+  support("brand-stream-page", "BrandStreamPage", "Brand Stream / Concept studio", "page", "studio-only"),
   support("studio-assistant", "AgentSamAssistant", "AgentSam studio assistant", "studio", "studio-only"),
 ]);
 

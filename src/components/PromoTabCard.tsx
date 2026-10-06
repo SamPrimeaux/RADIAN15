@@ -16,7 +16,7 @@ export const PromoTabCard: React.FC = () => {
   };
 
   const handleCopyCode = () => {
-    navigator.clipboard?.writeText('RADIAN15');
+    navigator.clipboard?.writeText('DEMO15');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -28,10 +28,10 @@ export const PromoTabCard: React.FC = () => {
         <button
           onClick={() => setIsPromoOpen(true)}
           className="fixed left-0 top-1/2 -translate-y-1/2 z-40 bg-[#0c0c0c] text-white hover:text-[#e2a8aa] border border-l-0 border-white/20 py-3.5 px-2 text-[10px] uppercase font-bold tracking-[0.25em] shadow-xl transition-all duration-300 hover:pl-3 group flex items-center gap-1.5 [writing-mode:vertical-rl] rotate-180 cursor-pointer"
-          aria-label="Get 15% off coupon"
+          aria-label="Inspect illustrative offer card"
         >
           <Tag className="w-3.5 h-3.5 text-[#8b181b] rotate-90" />
-          <span>GET 15% OFF</span>
+          <span>DEMO OFFER</span>
         </button>
       )}
 
@@ -72,7 +72,7 @@ export const PromoTabCard: React.FC = () => {
               <div className="p-3 bg-white/5 border border-white/10 rounded-sm space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-white/70">Your Privilege Code:</span>
-                  <span className="text-xs font-mono font-bold text-white tracking-widest">RADIAN15</span>
+                  <span className="text-xs font-mono font-bold text-white tracking-widest">DEMO15</span>
                 </div>
                 <button
                   onClick={handleCopyCode}
