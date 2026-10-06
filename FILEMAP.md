@@ -11,6 +11,8 @@
 ├── vite.config.ts                       # Vite 8 config with Tailwind v4 & host allowlisting
 ├── README.md                            # Complete multi-page storefront & Brand Studio documentation
 ├── FILEMAP.md                           # This file: component map, module roles & WIP status
+├── .env.example                         # Environment variables placeholder
+├── .gitignore                           # Git ignore rules
 │
 └── src/
     ├── main.tsx                         # React 19 root bootstrap
@@ -21,14 +23,19 @@
     │   └── index.ts                     # TypeScript data interfaces (PageRoute, Product, EpistemicState, BrandWorkspace)
     │
     ├── data/
-    │   ├── catalog.ts                   # Products, stories, reviews, blogs, faqs datasets
+    │   ├── catalog.ts                   # Autumn/Winter 26 products, stories, reviews, blogs, faqs datasets
     │   └── brandStreamData.ts           # Brand workspaces (RADIAN, FNF, CoPro), recovery receipts & cards
     │
     ├── context/
     │   └── CartContext.tsx              # Central state: multi-page routing, cart, overlays, currency & fly ghost
     │
     ├── assets/
-    │   └── images/                      # High-res campaign & studio photography assets
+    │   └── images/                      # Generated campaign & studio photography assets
+    │       ├── hero_autumn_winter_*.jpg        # S02 Hero campaign visual (16:9)
+    │       ├── lookbook_leather_editorial_*.jpg# S11 Shoppable lookbook visual (16:9)
+    │       ├── split_media_cotton_maroon_*.jpg # S09 Cotton editorial (3:4)
+    │       ├── split_media_leather_kuro_*.jpg  # S09 Leather editorial (3:4)
+    │       └── pdp_gallery_leather_tee_*.jpg   # S13 Calfskin Tee PDP gallery (3:4)
     │
     └── components/                      # Modular UI components
         │
@@ -79,3 +86,51 @@
         ├── SocialGrid.tsx               # S23 @RADIAN 3x2 full bleed Instagram square grid
         └── FAQAndTrust.tsx              # S24 FAQ accordions + S25 Trust strip
 ```
+
+---
+
+## 🏗️ Multi-Page & Master Scroll State Architecture
+
+```text
+               ┌────────────────────────────────────────────────────────┐
+               │                      CartProvider                      │
+               │   (Synchronized Multi-Page Router & Global State)      │
+               └──────────────────────────┬─────────────────────────────┘
+                                          │
+        ┌──────────────────┬──────────────┼──────────────┬──────────────────┐
+        ▼                  ▼              ▼              ▼                  ▼
+┌──────────────┐   ┌──────────────┐ ┌───────────┐ ┌──────────────┐   ┌──────────────┐
+│  / (Home)    │   │ /collections │ │ /lookbook │ │   /maison    │   │   /reserve   │
+│  Flagship    │   │ Catalog Grid │ │ Hotspots  │ │ Atelier Code │   │  VIP Vault   │
+│  27 Sections │   │ Faceted Sort │ │ Diptychs  │ │ VIP Bookings │   │ Passes & Drops│
+└──────────────┘   └──────────────┘ └───────────┘ └──────────────┘   └──────────────┘
+        │                  │              │              │                  │
+        └──────────────────┴──────────────┼──────────────┴──────────────────┘
+                                          │
+                         ┌────────────────┴────────────────┐
+                         ▼                                 ▼
+               ┌───────────────────┐             ┌───────────────────┐
+               │   /product/:id    │             │      /studio      │
+               │  Standalone PDP   │             │   Brand Stream    │
+               │  Fit & Swatches   │             │ Recovery Studio   │
+               └───────────────────┘             └───────────────────┘
+```
+
+---
+
+## 📋 Complete Feature & Implementation Matrix
+
+| Milestone / Feature Area | Target Spec | Implementation Status | Notes |
+|:---|:---|:---|:---|
+| **Master Scroll Map (S01–S27)** | Exact heights & act structure | ✅ 100% Preserved & Active | 27 sections matching teardown wireframes on `/` |
+| **Sticky Curtain Hero (S02)** | Scales 1 $\to$ 0.85 & blurs on scroll | ✅ 100% Preserved & Active | Fully responsive with touch hotspots |
+| **Dual Pinned Rails PDP (S13)** | Dual sticky rails at `top: 80px` | ✅ 100% Preserved & Active | Left rail options, right rail accordions |
+| **Bundle Builder (S12)** | Pinned sticky card, 20% calculation | ✅ 100% Preserved & Active | Interactive checkboxes with live summary |
+| **Full-Height Frosted Menu** | `inset-y-0`, `backdrop-blur-2xl` | ✅ Expanded to Multi-Page | Full screen height, glassmorphic styling |
+| **Standalone PDP (`ProductDetailPage`)** | Dedicated individual product pages | ✅ 100% Preserved & Active | Cross-sell rail, model specs, size guide |
+| **Framer Motion Transitions** | Page-level transitions | ✅ Active Across All Pages | Smooth cubic-bezier spring curves |
+| **Collections Catalog Page** | Faceted filters, grid toggle (2/3/4) | ✅ Added | Full catalog browser with live search |
+| **Lookbook Editorial Page** | Shoppable hotspot pins & chapters | ✅ Added | 3 chapters with 1-click garment buy |
+| **Maison & Provenance Page** | Heritage, slider & VIP bookings | ✅ Added | Before/after fabric slider & suite booking |
+| **VIP Drop Vault Page** | Countdown clocks, passes & unlocks | ✅ Added | Cryptographic invite code & serial pass |
+| **AgentSam Brand Stream Studio** | Deterministic brand recovery & cards | ✅ Added | Visual archaeology, receipts & inspector |
