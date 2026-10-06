@@ -1,4 +1,8 @@
 import React from 'react';
+import { EditorialScene } from './portable/EditorialScene';
+import { EditorialSceneGallery } from './portable/EditorialSceneGallery';
+import { EditorialHostProvider } from './portable/EditorialHost';
+
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { CartProvider, useCart } from './context/CartContext';
 import { Header } from './components/Header';
@@ -155,7 +159,7 @@ const MainStoreContent: React.FC = () => {
             {/* S22: Newsletter "The Edit, In Your Inbox" */}
             <NewsletterBand />
 
-            {/* S23: @RADIAN Social Grid 3x2 Full Bleed */}
+            {/* S23: social media grid 3x2 Full Bleed */}
             <SocialGrid />
 
             {/* S24 & S25: FAQ Accordions & Trust Strip */}
@@ -168,7 +172,12 @@ const MainStoreContent: React.FC = () => {
 };
 
 export default function App() {
+  const params = new URLSearchParams(window.location.search);
+  const selectedScene = params.get('scene');
+  if (selectedScene) return <EditorialScene id={selectedScene} />;
+  if (params.has('gallery')) return <EditorialSceneGallery />;
   return (
+    <EditorialHostProvider>
     <CartProvider>
       <div className="relative min-h-screen bg-[#0b0b0b] text-[#111111] overflow-x-hidden selection:bg-[#8b181b] selection:text-white">
         {/* Header (S01 Marquee + Floating Nav) */}
@@ -179,13 +188,13 @@ export default function App() {
         <SearchPanel />
         <BagDrawer />
         <DiscoverDrawer />
-        <PromoTabCard />
+        {/* Promotions require a real host adapter. Preview it independently in the scene library. */}
         <StoriesViewerModal />
         <QuickViewModal />
         <FlyToCartGhost />
 
         {/* Built-in AgentSam Assistant Dashboard with Interactive Tips */}
-        <AgentSamAssistant />
+        {params.has('studio') && <AgentSamAssistant />}
 
         {/* Main Storefront or Dedicated PDP View with Framer Motion Page Transitions */}
         <MainStoreContent />
@@ -194,5 +203,6 @@ export default function App() {
         <Footer />
       </div>
     </CartProvider>
+    </EditorialHostProvider>
   );
 }

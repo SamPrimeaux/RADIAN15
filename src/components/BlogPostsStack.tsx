@@ -1,8 +1,11 @@
+import { useEditorialBrand } from '../portable/EditorialHost';
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { BLOG_POSTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const BlogPostsStack: React.FC = () => {
+  const brand = useEditorialBrand();
+  const { BLOG_POSTS } = useEditorialData();
   const featuredPost = BLOG_POSTS[0];
   const secondaryPosts = BLOG_POSTS.slice(1);
 
@@ -12,7 +15,7 @@ export const BlogPostsStack: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-black/10 pb-4">
           <div>
             <span className="text-[10px] uppercase tracking-[0.3em] text-[#8b181b] font-bold block mb-1">
-              THE RADIAN JOURNAL
+              THE {brand.name} JOURNAL
             </span>
             <h2 className="text-3xl font-bold uppercase tracking-[0.1em] text-black">
               EDITORIAL ESSAYS

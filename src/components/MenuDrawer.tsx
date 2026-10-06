@@ -1,9 +1,12 @@
+import { useEditorialBrand } from '../portable/EditorialHost';
 import React, { useState } from 'react';
 import { ChevronRight, ArrowLeft, X, Globe, User, Sparkles, ExternalLink } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { CATEGORIES_WARDROBE, PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const MenuDrawer: React.FC = () => {
+  const brand = useEditorialBrand();
+  const { CATEGORIES_WARDROBE, PRODUCTS } = useEditorialData();
   const {
     isMenuOpen,
     setIsMenuOpen,
@@ -39,7 +42,7 @@ export const MenuDrawer: React.FC = () => {
         <div className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-white/10 bg-black/30 backdrop-blur-md">
           <div className="flex items-center gap-3">
             <span className="text-[#8b181b] text-xs">◆</span>
-            <span className="font-semibold tracking-[0.3em] uppercase text-sm sm:text-base">RADIAN</span>
+            <span className="font-semibold tracking-[0.3em] uppercase text-sm sm:text-base">{brand.name}</span>
             <span className="text-[10px] tracking-[0.2em] text-[#e2a8aa] uppercase font-mono px-2 py-0.5 rounded bg-white/5 border border-white/10">
               AW26 DIRECTORY
             </span>

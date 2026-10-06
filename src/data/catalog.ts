@@ -1,10 +1,15 @@
+import heroAutumn from '../assets/images/hero_autumn_winter_1790997144449.jpg';
+import lookbookLeather from '../assets/images/lookbook_leather_editorial_1790997154232.jpg';
+import pdpLeatherTee from '../assets/images/pdp_gallery_leather_tee_1790997183315.jpg';
+import splitCotton from '../assets/images/split_media_cotton_maroon_1790997163291.jpg';
+import splitLeather from '../assets/images/split_media_leather_kuro_1790997173107.jpg';
 import { Product, StoryGroup } from '../types';
 
-export const HERO_IMAGE = '/src/assets/images/hero_autumn_winter_1790997144449.jpg';
-export const LOOKBOOK_IMAGE = '/src/assets/images/lookbook_leather_editorial_1790997154232.jpg';
-export const SPLIT_COTTON_IMAGE = '/src/assets/images/split_media_cotton_maroon_1790997163291.jpg';
-export const SPLIT_LEATHER_IMAGE = '/src/assets/images/split_media_leather_kuro_1790997173107.jpg';
-export const PDP_LEATHER_TEE_IMAGE = '/src/assets/images/pdp_gallery_leather_tee_1790997183315.jpg';
+export const HERO_IMAGE = heroAutumn;
+export const LOOKBOOK_IMAGE = lookbookLeather;
+export const SPLIT_COTTON_IMAGE = splitCotton;
+export const SPLIT_LEATHER_IMAGE = splitLeather;
+export const PDP_LEATHER_TEE_IMAGE = pdpLeatherTee;
 
 export const PRODUCTS: Product[] = [
   {
@@ -53,7 +58,7 @@ export const PRODUCTS: Product[] = [
     name: 'SLOUCHY CULOTTES',
     category: 'BOTTOMS',
     price: 385.0,
-    image: '/src/assets/images/split_media_cotton_maroon_1790997163291.jpg',
+    image: splitCotton,
     hoverImage: HERO_IMAGE,
     colors: [
       { name: 'Slate Deep', hex: '#1c1f24' },

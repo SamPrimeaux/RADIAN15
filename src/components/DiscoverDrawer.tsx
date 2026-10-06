@@ -1,9 +1,12 @@
+import { useEditorialBrand } from '../portable/EditorialHost';
 import React, { useState } from 'react';
 import { X, Plus, Sparkles, Tag, ArrowUpRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const DiscoverDrawer: React.FC = () => {
+  const brand = useEditorialBrand();
+  const { PRODUCTS } = useEditorialData();
   const { isDiscoverOpen, setIsDiscoverOpen, addToCart, setQuickViewProduct, formatPrice } = useCart();
   const [activeTab, setActiveTab] = useState<'NEW' | 'OFFERS' | 'MORE'>('NEW');
 
@@ -27,7 +30,7 @@ export const DiscoverDrawer: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-[#8b181b]" />
-              <h2 className="text-sm uppercase tracking-[0.25em] font-semibold text-white">DISCOVER RADIAN</h2>
+              <h2 className="text-sm uppercase tracking-[0.25em] font-semibold text-white">DISCOVER {brand.name}</h2>
             </div>
             <button
               onClick={() => setIsDiscoverOpen(false)}

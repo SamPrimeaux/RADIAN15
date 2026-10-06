@@ -1,9 +1,12 @@
+import { useEditorialBrand } from '../portable/EditorialHost';
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, ArrowRight, X, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { HERO_IMAGE, PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const HeroCurtain: React.FC = () => {
+  const brand = useEditorialBrand();
+  const { HERO_IMAGE, PRODUCTS } = useEditorialData();
   const { addToCart, setQuickViewProduct, formatPrice, setIsBagOpen } = useCart();
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
   const [scrollY, setScrollY] = useState(0);
@@ -46,7 +49,7 @@ export const HeroCurtain: React.FC = () => {
       >
         <img
           src={HERO_IMAGE}
-          alt="RADIAN Autumn / Winter 26 Campaign"
+          alt={`${brand.name} ${brand.season} concept image`}
           className="w-full h-full object-cover object-[65%_center] sm:object-center"
           referrerPolicy="no-referrer"
         />

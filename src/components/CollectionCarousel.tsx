@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Eye, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 import { Product } from '../types';
 
 export const CollectionCarousel: React.FC = () => {
+  const { PRODUCTS } = useEditorialData();
   const { addToCart, setQuickViewProduct, formatPrice, setActiveProductPage } = useCart();
   const [activeTab, setActiveTab] = useState<'NEW' | 'BEST' | 'SALE'>('NEW');
   const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Sparkles, Play } from 'lucide-react';
-import { HERO_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const BrandFilm: React.FC = () => {
+  const { HERO_IMAGE } = useEditorialData();
   return (
     <section className="relative z-20 h-[650px] md:h-[900px] w-full bg-black text-white flex items-center justify-center overflow-hidden border-t border-b border-white/10">
       {/* Background cinematic media with film grain & slow ambient pulse */}

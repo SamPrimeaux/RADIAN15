@@ -1,15 +1,18 @@
+import { useEditorialBrand } from '../portable/EditorialHost';
 import React from 'react';
 import { Instagram, ArrowUpRight } from 'lucide-react';
-import { HERO_IMAGE, LOOKBOOK_IMAGE, SPLIT_COTTON_IMAGE, SPLIT_LEATHER_IMAGE, PDP_LEATHER_TEE_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const SocialGrid: React.FC = () => {
+  const brand = useEditorialBrand();
+  const { HERO_IMAGE, LOOKBOOK_IMAGE, SPLIT_COTTON_IMAGE, SPLIT_LEATHER_IMAGE, PDP_LEATHER_TEE_IMAGE } = useEditorialData();
   const tiles = [
-    { src: HERO_IMAGE, tag: '@RADIAN · Sable Wool Crepe', likes: '1.4k' },
-    { src: LOOKBOOK_IMAGE, tag: '@RADIAN · Evening Vignette AW26', likes: '2.8k' },
-    { src: SPLIT_COTTON_IMAGE, tag: '@RADIAN · 380gsm Carded Fleece', likes: '920' },
-    { src: SPLIT_LEATHER_IMAGE, tag: '@RADIAN · Drum-Dyed Kuro Biker', likes: '3.1k' },
-    { src: PDP_LEATHER_TEE_IMAGE, tag: '@RADIAN · 0.6mm Calfskin Tee', likes: '1.8k' },
-    { src: HERO_IMAGE, tag: '@RADIAN · Florence Workshop Archive', likes: '4.2k' }
+    { src: HERO_IMAGE, tag: `${brand.socialHandle} · Sable Wool Crepe`, likes: '1.4k' },
+    { src: LOOKBOOK_IMAGE, tag: `${brand.socialHandle} · Evening Vignette AW26`, likes: '2.8k' },
+    { src: SPLIT_COTTON_IMAGE, tag: `${brand.socialHandle} · 380gsm Carded Fleece`, likes: '920' },
+    { src: SPLIT_LEATHER_IMAGE, tag: `${brand.socialHandle} · Drum-Dyed Kuro Biker`, likes: '3.1k' },
+    { src: PDP_LEATHER_TEE_IMAGE, tag: `${brand.socialHandle} · 0.6mm Calfskin Tee`, likes: '1.8k' },
+    { src: HERO_IMAGE, tag: `${brand.socialHandle} · Florence Workshop Archive`, likes: '4.2k' }
   ];
 
   return (
@@ -20,7 +23,7 @@ export const SocialGrid: React.FC = () => {
             COMMUNITY & DISPATCH
           </span>
           <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-[0.14em] text-black">
-            @RADIAN · FOLLOW US
+            {brand.socialHandle} · FOLLOW US
           </h2>
         </div>
         <a

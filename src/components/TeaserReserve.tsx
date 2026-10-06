@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { ArrowRight, Sparkles, Check, X } from 'lucide-react';
-import { SPLIT_LEATHER_IMAGE, PDP_LEATHER_TEE_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const TeaserReserve: React.FC = () => {
+  const { SPLIT_LEATHER_IMAGE, PDP_LEATHER_TEE_IMAGE } = useEditorialData();
   const [email, setEmail] = useState('');
   const [reserved, setReserved] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

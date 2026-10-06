@@ -1,8 +1,9 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { CATEGORIES_WARDROBE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const WardrobeGallery: React.FC = () => {
+  const { CATEGORIES_WARDROBE } = useEditorialData();
   return (
     <section
       id="wardrobe"

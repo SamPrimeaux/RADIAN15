@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingBag, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS, HERO_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const FullscreenEditorial: React.FC = () => {
+  const { PRODUCTS, HERO_IMAGE } = useEditorialData();
   const { addToCart, setQuickViewProduct, formatPrice } = useCart();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [scrollRatio, setScrollRatio] = useState(0);

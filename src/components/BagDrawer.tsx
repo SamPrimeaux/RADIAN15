@@ -1,3 +1,4 @@
+import { useEditorialHost } from '../portable/EditorialHost';
 import React, { useState } from 'react';
 import { X, Plus, Minus, Trash2, ArrowRight, ShieldCheck, Truck, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -16,33 +17,48 @@ export const BagDrawer: React.FC = () => {
     formatPrice
   } = useCart();
 
+  const { commerce, mode } = useEditorialHost();
+  const canCheckout = mode === 'connected' && Boolean(commerce.onCheckout);
+  const canUsePromo = mode === 'connected' && Boolean(commerce.validatePromotion);
+  const [status, setStatus] = useState('');
+  const [discountValue, setDiscountValue] = useState(0);
   const [promoCode, setPromoCode] = useState('');
-  const [appliedPromo, setAppliedPromo] = useState<string | null>('RADIAN15');
+  const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
   if (!isBagOpen) return null;
 
-  const discountAmount = appliedPromo ? cartTotal * 0.15 : 0;
+  const discountAmount = appliedPromo ? discountValue : 0;
   const finalTotal = Math.max(0, cartTotal - discountAmount);
   const remainingForFreeShipping = Math.max(0, freeShippingThreshold - cartTotal);
 
-  const handleApplyPromo = (e: React.FormEvent) => {
+  const handleApplyPromo = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (promoCode.trim().toUpperCase() === 'RADIAN15' || promoCode.trim().toUpperCase() === 'MEMBER20') {
-      setAppliedPromo(promoCode.trim().toUpperCase());
+    if (!commerce.validatePromotion || !canUsePromo) return;
+    try {
+      const promo = await commerce.validatePromotion(promoCode.trim(), cart);
+      setAppliedPromo(promo?.code ?? null);
+      setDiscountValue(promo?.discount ?? 0);
+      setStatus(promo ? 'Promotion validated by your store.' : 'This promotion is unavailable.');
       setPromoCode('');
-    } else {
-      alert('Code not recognized. Use "RADIAN15" for 15% off.');
+    } catch {
+      setStatus('Could not verify promotion. Please try again.');
     }
   };
 
-  const handleSimulateCheckout = () => {
+  const handleCheckout = async () => {
+    if (!canCheckout || !commerce.onCheckout) return;
     setIsCheckingOut(true);
-    setTimeout(() => {
-      setIsCheckingOut(false);
+    setStatus('');
+    try {
+      await commerce.onCheckout(cart);
       setCheckoutSuccess(true);
-    }, 1200);
+    } catch {
+      setStatus('Checkout could not be started. No order was confirmed.');
+    } finally {
+      setIsCheckingOut(false);
+    }
   };
 
   return (
@@ -104,9 +120,9 @@ export const BagDrawer: React.FC = () => {
               <div className="w-14 h-14 mx-auto rounded-full bg-[#8b181b]/20 text-[#8b181b] flex items-center justify-center">
                 <Sparkles className="w-7 h-7" />
               </div>
-              <h3 className="font-serif text-2xl text-white">Order Confirmed</h3>
+              <h3 className="font-serif text-2xl text-white">Checkout handed to store</h3>
               <p className="text-sm text-white/60 max-w-sm mx-auto">
-                Thank you for your order. Confirmation #RDN-9842 has been dispatched to your email with concierge tracking.
+                Your store connector accepted the checkout request. Order status is verified only by your commerce provider.
               </p>
               <button
                 onClick={() => {
@@ -212,12 +228,12 @@ export const BagDrawer: React.FC = () => {
         {cart.length > 0 && !checkoutSuccess && (
           <div className="p-8 border-t border-white/10 bg-[#090909] space-y-4">
             {/* Promo Code input */}
-            <form onSubmit={handleApplyPromo} className="flex gap-2">
+            {canUsePromo && <form onSubmit={handleApplyPromo} className="flex gap-2">
               <input
                 type="text"
                 value={promoCode}
                 onChange={e => setPromoCode(e.target.value)}
-                placeholder="PROMO CODE (e.g. RADIAN15)"
+                placeholder="PROMOTION CODE"
                 className="flex-1 bg-white/5 border border-white/10 px-3 py-2 text-xs text-white uppercase placeholder-white/40 focus:outline-none focus:border-white/30"
               />
               <button
@@ -226,11 +242,11 @@ export const BagDrawer: React.FC = () => {
               >
                 Apply
               </button>
-            </form>
+            </form>}
 
             {appliedPromo && (
               <div className="flex justify-between items-center text-xs text-[#e2a8aa]">
-                <span>15% Welcome Privilege ({appliedPromo})</span>
+                <span>Promotion ({appliedPromo})</span>
                 <span className="tabular-nums font-mono">-{formatPrice(discountAmount)}</span>
               </div>
             )}
@@ -239,7 +255,7 @@ export const BagDrawer: React.FC = () => {
             <div className="space-y-1.5 pt-2 border-t border-white/10">
               <div className="flex justify-between items-center text-xs text-white/60">
                 <span>Shipping</span>
-                <span>{remainingForFreeShipping === 0 ? 'Complimentary' : '$25.00'}</span>
+                <span>{canCheckout ? (remainingForFreeShipping === 0 ? 'Estimate: included' : 'At checkout') : 'Preview only'}</span>
               </div>
               <div className="flex justify-between items-center text-sm font-semibold text-white">
                 <span className="uppercase tracking-wider">Estimated Total</span>
@@ -250,17 +266,18 @@ export const BagDrawer: React.FC = () => {
               </div>
             </div>
 
+            {status && <p role="status" className="text-xs text-white/65">{status}</p>}
             {/* Primary Checkout Button */}
             <button
-              onClick={handleSimulateCheckout}
-              disabled={isCheckingOut}
-              className="w-full py-4 bg-white text-black text-xs font-bold uppercase tracking-[0.25em] hover:bg-[#8b181b] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
+              onClick={handleCheckout}
+              disabled={isCheckingOut || !canCheckout}
+              className="w-full py-4 bg-white text-black text-xs font-bold uppercase tracking-[0.14em] hover:bg-[#8b181b] hover:text-white transition-all duration-300 flex items-center justify-center gap-2 group disabled:cursor-not-allowed disabled:opacity-55"
             >
               {isCheckingOut ? (
-                <span>SECURELY PROCESSING...</span>
+                <span>OPENING STORE CHECKOUT...</span>
               ) : (
                 <>
-                  <span>PROCEED TO CHECKOUT</span>
+                  <span>{canCheckout ? 'PROCEED TO CHECKOUT' : 'PREVIEW ONLY — CHECKOUT UNAVAILABLE'}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
@@ -268,7 +285,7 @@ export const BagDrawer: React.FC = () => {
 
             <div className="flex items-center justify-center gap-2 text-[10px] text-white/40 tracking-wider">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>256-BIT ENCRYPTED CONCIERGE CHECKOUT</span>
+              <span>{canCheckout ? 'Checkout managed by your commerce provider' : 'Illustrative cart — no live orders or payments'}</span>
             </div>
           </div>
         )}

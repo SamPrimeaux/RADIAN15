@@ -1,8 +1,9 @@
 import React from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { HERO_IMAGE, LOOKBOOK_IMAGE, SPLIT_LEATHER_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const PromoGrid: React.FC = () => {
+  const { HERO_IMAGE, LOOKBOOK_IMAGE, SPLIT_LEATHER_IMAGE } = useEditorialData();
   return (
     <section className="hidden md:block relative z-20 bg-[#0b0b0b] text-white py-20 px-8 lg:px-12 border-t border-b border-white/10">
       <div className="max-w-[1440px] mx-auto space-y-8">

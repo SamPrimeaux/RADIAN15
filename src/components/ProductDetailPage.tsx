@@ -14,10 +14,11 @@ import {
   Heart
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 import { Product } from '../types';
 
 export const ProductDetailPage: React.FC = () => {
+  const { PRODUCTS } = useEditorialData();
   const {
     activeProductPage,
     setActiveProductPage,
@@ -298,7 +299,7 @@ export const ProductDetailPage: React.FC = () => {
                 {openSection === 'shipping' && (
                   <div className="px-4 pb-4 text-xs text-neutral-600 space-y-2 border-t border-neutral-100 pt-2 font-light">
                     <p>Complimentary express worldwide shipping on orders exceeding $150.</p>
-                    <p>All import duties, local taxes, and courier fees fully absorbed by RADIAN.</p>
+                    <p>Shipping, duties, and taxes are confirmed by the connected storefront.</p>
                     <p>30-day effortless return window with complimentary home courier pickup.</p>
                   </div>
                 )}

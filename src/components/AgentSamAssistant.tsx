@@ -16,7 +16,7 @@ import {
   Send
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 interface TipCard {
   id: string;
@@ -42,7 +42,7 @@ const TIPS: TipCard[] = [
     id: 'tip-2',
     badge: 'MULTIMODAL AI',
     title: 'Transcribe Audio & Voice Concierge',
-    description: 'Allow VIP shoppers to speak their styling inquiries to hear instant audio recommendations from the RADIAN Atelier.',
+    description: 'Allow VIP shoppers to speak their styling inquiries to hear instant audio recommendations from the connected storefront.',
     suggestedPrompt: 'Integrate the Gemini Live API or voice recorder to provide real-time audio fashion advice.',
     iconBg: 'from-cyan-500/20 via-blue-500/20 to-indigo-500/20',
     iconSvg: '🎙️'
@@ -89,6 +89,7 @@ const BUILT_FILES = [
 ];
 
 export const AgentSamAssistant: React.FC = () => {
+  const { PRODUCTS } = useEditorialData();
   const {
     isAgentSamOpen,
     setIsAgentSamOpen,

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
-import { TESTIMONIALS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const TestimonialsSection: React.FC = () => {
+  const { TESTIMONIALS } = useEditorialData();
   const [activeReviewIdx, setActiveReviewIdx] = useState(0);
   const activeReview = TESTIMONIALS[activeReviewIdx];
 

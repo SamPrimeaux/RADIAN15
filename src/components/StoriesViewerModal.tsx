@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { STORIES_DATA, PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const StoriesViewerModal: React.FC = () => {
+  const { STORIES_DATA, PRODUCTS } = useEditorialData();
   const { activeStoryIndex, setActiveStoryIndex, addToCart, setQuickViewProduct, formatPrice } = useCart();
   const [slideIndex, setSlideIndex] = useState(0);
 

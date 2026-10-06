@@ -1,9 +1,10 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const DressBlurb: React.FC = () => {
+  const { PRODUCTS } = useEditorialData();
   const { setQuickViewProduct } = useCart();
   const matrixDress = PRODUCTS.find(p => p.id === 'matrix-mini-dress');
 

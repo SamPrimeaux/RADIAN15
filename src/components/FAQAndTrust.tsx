@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Plus, Minus, Headphones, Truck, Award } from 'lucide-react';
-import { FAQS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const FAQAndTrust: React.FC = () => {
+  const { FAQS } = useEditorialData();
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
   const toggle = (idx: number) => {

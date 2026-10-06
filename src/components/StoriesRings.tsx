@@ -1,8 +1,9 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
-import { STORIES_DATA } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const StoriesRings: React.FC = () => {
+  const { STORIES_DATA } = useEditorialData();
   const { setActiveStoryIndex } = useCart();
 
   return (

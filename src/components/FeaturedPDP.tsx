@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { ShoppingBag, Check, ChevronDown, ShieldCheck, Ruler, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS, PDP_LEATHER_TEE_IMAGE, HERO_IMAGE, SPLIT_LEATHER_IMAGE, LOOKBOOK_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const FeaturedPDP: React.FC = () => {
+  const { PRODUCTS, PDP_LEATHER_TEE_IMAGE, HERO_IMAGE, SPLIT_LEATHER_IMAGE, LOOKBOOK_IMAGE } = useEditorialData();
   const { addToCart, setIsBagOpen, formatPrice } = useCart();
   const product = PRODUCTS.find(p => p.id === 'leather-tee')!;
 
@@ -264,7 +265,7 @@ export const FeaturedPDP: React.FC = () => {
                 {openAccordion === 'shipping' && (
                   <div className="px-4 pb-4 text-xs text-neutral-600 space-y-1 border-t border-neutral-100 pt-2">
                     <p>Complimentary express worldwide delivery.</p>
-                    <p>All taxes, duties, and customs clearances pre-paid by RADIAN.</p>
+                    <p>Final shipping, duties, and taxes are confirmed by the connected storefront.</p>
                     <p>30-day effortless return window with complimentary home courier pickup.</p>
                   </div>
                 )}

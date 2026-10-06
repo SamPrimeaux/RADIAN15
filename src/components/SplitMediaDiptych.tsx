@@ -1,8 +1,9 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { SPLIT_COTTON_IMAGE, SPLIT_LEATHER_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const SplitMediaDiptych: React.FC = () => {
+  const { SPLIT_COTTON_IMAGE, SPLIT_LEATHER_IMAGE } = useEditorialData();
   return (
     <section id="split-media" className="relative z-20 bg-[#0b0b0b] text-white">
       {/* 2-Column Split Diptych (stacks on mobile per spec: 1642px stacked) */}

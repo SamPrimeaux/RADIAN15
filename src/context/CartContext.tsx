@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product, CartItem } from '../types';
-import { PRODUCTS } from '../data/catalog';
+import { useEditorialData, useEditorialHost } from '../portable/EditorialHost';
 
 interface FlyState {
   startX: number;
@@ -59,14 +59,10 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [cart, setCart] = useState<CartItem[]>([
-    {
-      product: PRODUCTS[0], // Sable Blazer default in cart
-      selectedColor: 'Obsidian Black',
-      selectedSize: '38',
-      quantity: 1
-    }
-  ]);
+  const { PRODUCTS } = useEditorialData();
+  const { commerce } = useEditorialHost();
+  // An empty cart is the only truthful default for a host-agnostic scene.
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBagOpen, setIsBagOpen] = useState(false);
@@ -211,10 +207,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const clearCart = () => setCart([]);
 
+  useEffect(() => {
+    commerce.onCartChange?.(cart);
+  }, [cart, commerce]);
+
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const cartTotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
-  const freeShippingThreshold = 150;
+  const freeShippingThreshold = commerce.freeShippingThreshold ?? 150;
   const freeShippingProgress = Math.min(100, (cartTotal / freeShippingThreshold) * 100);
 
   return (

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { ShoppingBag, X, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { LOOKBOOK_IMAGE, PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const ShopTheLookbook: React.FC = () => {
+  const { LOOKBOOK_IMAGE, PRODUCTS } = useEditorialData();
   const { addToCart, setQuickViewProduct, formatPrice } = useCart();
   const [activeSpot, setActiveSpot] = useState<string | null>('spot-dress');
 

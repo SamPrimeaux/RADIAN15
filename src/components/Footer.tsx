@@ -1,8 +1,10 @@
+import { useEditorialBrand } from '../portable/EditorialHost';
 import React from 'react';
 import { Globe, ArrowUp } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 export const Footer: React.FC = () => {
+  const brand = useEditorialBrand();
   const { currency, setCurrency } = useCart();
 
   const scrollToTop = () => {
@@ -17,7 +19,7 @@ export const Footer: React.FC = () => {
         <div className="md:col-span-4 space-y-4">
           <div className="flex items-center gap-2 text-lg font-bold tracking-[0.25em] uppercase text-white">
             <span className="text-[#8b181b]">◆</span>
-            <span>RADIAN</span>
+            <span>{brand.name}</span>
             <span className="text-[#8b181b]">◆</span>
           </div>
           <p className="text-xs text-neutral-400 font-light leading-relaxed max-w-sm">
@@ -89,7 +91,7 @@ export const Footer: React.FC = () => {
       <div className="border-t border-white/10 bg-[#050505] py-6 px-6 md:px-12 text-[11px] text-neutral-500">
         <div className="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            &copy; 2026 RADIAN FLAGSHIP S.R.L. ALL RIGHTS RESERVED.
+            &copy; 2026 {brand.name} · Editorial concept study.
           </div>
 
           <div className="flex items-center gap-6">

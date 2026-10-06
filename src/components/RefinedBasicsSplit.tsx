@@ -1,9 +1,10 @@
 import React from 'react';
 import { ShoppingBag, Eye } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS, HERO_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const RefinedBasicsSplit: React.FC = () => {
+  const { PRODUCTS, HERO_IMAGE } = useEditorialData();
   const { addToCart, setQuickViewProduct, formatPrice, setActiveProductPage } = useCart();
   const basics = PRODUCTS.slice(0, 8);
 

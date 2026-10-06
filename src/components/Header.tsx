@@ -1,8 +1,10 @@
+import { useEditorialBrand } from '../portable/EditorialHost';
 import React, { useState, useEffect } from 'react';
 import { Search, Megaphone, ShoppingBag, Globe, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 export const Header: React.FC = () => {
+  const brand = useEditorialBrand();
   const {
     cartCount,
     setIsMenuOpen,
@@ -161,7 +163,7 @@ export const Header: React.FC = () => {
               }`}
             >
               <span className="text-[#8b181b] text-xs">◆</span>
-              <span>RADIAN</span>
+              <span>{brand.name}</span>
               <span className="text-[#8b181b] text-xs">◆</span>
             </button>
           </div>

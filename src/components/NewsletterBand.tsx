@@ -1,7 +1,9 @@
+import { useEditorialBrand } from '../portable/EditorialHost';
 import React, { useState } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 
 export const NewsletterBand: React.FC = () => {
+  const brand = useEditorialBrand();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
@@ -31,7 +33,7 @@ export const NewsletterBand: React.FC = () => {
         {subscribed ? (
           <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 text-white rounded-full text-xs font-semibold uppercase tracking-wider">
             <Check className="w-4 h-4 text-[#8b181b]" />
-            <span>Welcome to the Radian Dispatch</span>
+            <span>Welcome to the {brand.name} Dispatch</span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">

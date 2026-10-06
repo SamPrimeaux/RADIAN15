@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ArrowLeftRight, Sparkles } from 'lucide-react';
-import { SPLIT_COTTON_IMAGE, SPLIT_LEATHER_IMAGE } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const BeforeAfterSlider: React.FC = () => {
+  const { SPLIT_COTTON_IMAGE, SPLIT_LEATHER_IMAGE } = useEditorialData();
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isInteracted, setIsInteracted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

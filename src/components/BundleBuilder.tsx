@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Check, ShoppingBag, Sparkles, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const BundleBuilder: React.FC = () => {
+  const { PRODUCTS } = useEditorialData();
   const { addToCart, setIsBagOpen, formatPrice } = useCart();
 
   const bundleItems = [

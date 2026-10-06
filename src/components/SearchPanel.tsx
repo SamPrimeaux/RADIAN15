@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS } from '../data/catalog';
+import { useEditorialData } from '../portable/EditorialHost';
 
 export const SearchPanel: React.FC = () => {
+  const { PRODUCTS } = useEditorialData();
   const { isSearchOpen, setIsSearchOpen, setQuickViewProduct, formatPrice } = useCart();
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
